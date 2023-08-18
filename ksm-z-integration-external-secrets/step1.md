@@ -1,10 +1,12 @@
 
 ### Install External Secrets Helm Chart
 
+#### 1. Add external-secrets Helm repository
 ```
 helm repo add external-secrets https://charts.external-secrets.io
 ```{{execute}}
 
+#### 2. Install external-secrets Helm Chart
 ```
 helm install external-secrets \
 external-secrets/external-secrets \
@@ -64,7 +66,7 @@ metadata:
 spec:
  refreshInterval: 30s                     # rate how often SecretManager pulls KeeperSecurity. 
                                           #   In this case every 30 seconds, for the example. 
-                                          #   We recoment this value to be 30 minutes or more.
+                                          #   We recommend this value to be 12 hours or more.
  secretStoreRef:                          # reference to the SecretStore defined above to authenticate against Keeper Security
    kind: SecretStore                      # tells External Secrets the type of the secret store, should be same as the one defined above
    name: my-external-secrets-secretstore  
