@@ -22,6 +22,14 @@
       {
         "title": "Step 5: Advanced Get Options, Caching & Record Deletion",
         "text": "step5.md"
+      },
+      {
+        "title": "Step 6: File Removal - Managing Attachments",
+        "text": "step6.md"
+      },
+      {
+        "title": "Step 7: GraphSync™ - Record Relationships",
+        "text": "step7.md"
       }
     ],
     "intro": {
