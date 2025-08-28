@@ -22,6 +22,10 @@
       {
         "title": "Step 5: Advanced Get Options, Caching & Record Deletion",
         "text": "step5.md"
+      },
+      {
+        "title": "Step 6: GraphSync™ Record Linking & File Management",
+        "text": "step6.md"
       }
     ],
     "intro": {
