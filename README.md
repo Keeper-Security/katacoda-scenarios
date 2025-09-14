@@ -1,3 +1,5 @@
+![katacoda-scenarios Header](https://github.com/user-attachments/assets/6e171419-ed40-4865-a4d3-0de0adf7a200)
+
 # katacoda-scenarios
 
 ## KSM Scenarios Feature Matrix
