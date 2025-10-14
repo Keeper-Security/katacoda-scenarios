@@ -4,6 +4,7 @@ This document provides comprehensive guidelines for creating high-quality Keeper
 
 ## Table of Contents
 
+- [Killercoda Syntax Reference](#killercoda-syntax-reference)
 - [Security & Safety Guidelines](#security--safety-guidelines)
 - [Tutorial Structure & Organization](#tutorial-structure--organization)
 - [Code Quality Standards](#code-quality-standards)
@@ -11,6 +12,30 @@ This document provides comprehensive guidelines for creating high-quality Keeper
 - [Technical Implementation Guidelines](#technical-implementation-guidelines)
 - [Testing & Validation Requirements](#testing--validation-requirements)
 - [Documentation Standards](#documentation-standards)
+
+## Killercoda Syntax Reference
+
+**📚 CRITICAL**: Before creating or modifying any Killercoda tutorials, consult the comprehensive syntax reference:
+
+**[docs/killercoda_syntax_reference.md](docs/killercoda_syntax_reference.md)**
+
+This document contains:
+- ✅ Complete markdown execute syntax (single-line, multi-line, heredoc)
+- ✅ Copy to clipboard patterns
+- ✅ Advanced execute options (terminals, hosts, interrupts)
+- ✅ Complete index.json schema with all available options
+- ✅ File structure guidelines
+- ✅ Default behaviors and gotchas
+- ✅ Common patterns used in our repository
+- ✅ Debugging tips for common issues
+
+**Key Points to Remember:**
+1. **Heredoc MUST use fenced code blocks** (not inline backticks)
+2. **Multi-line commands require triple backticks + {{execute}}**
+3. **Bash blocks auto-execute, others auto-copy** (by default)
+4. **Always test in Docker with matching imageid**
+
+**When in doubt, reference the docs!**
 
 ## Security & Safety Guidelines
 
