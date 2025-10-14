@@ -16,7 +16,8 @@ This creates a new directory `ksmsdk-java-tutorial` with the standard Gradle Jav
 
 Create a `build.gradle` file in the project root with the KSM Java SDK dependency:
 
-`cat > build.gradle << 'EOF'
+```
+cat > build.gradle << 'EOF'
 plugins {
     id 'java'
     id 'application'
@@ -43,15 +44,18 @@ java {
         languageVersion = JavaLanguageVersion.of(17)
     }
 }
-EOF`{{execute}}
+EOF
+```{{execute}}
 
 ### Create `settings.gradle`
 
 Create a `settings.gradle` file to define the project name:
 
-`cat > settings.gradle << 'EOF'
+```
+cat > settings.gradle << 'EOF'
 rootProject.name = 'ksmsdk-java-tutorial'
-EOF`{{execute}}
+EOF
+```{{execute}}
 
 ### Verify Project Structure
 
