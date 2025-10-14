@@ -4,16 +4,8 @@ This step guides you through setting up a new Gradle project, adding the Keeper 
 
 ## 1. Initialize Gradle Project
 
-First, create a new Java application project structure manually. This approach works with all Gradle versions.
+Create a new Java application project structure:
 
-```bash
-# Create project directory and navigate into it
-mkdir ksmsdk-java-tutorial && cd ksmsdk-java-tutorial
-
-# Create the necessary directory structure
-mkdir -p src/main/java/com/keepersecurity/ksmsdk/javatutorial
-mkdir -p src/test/java/com/keepersecurity/ksmsdk/javatutorial
-```
 `mkdir ksmsdk-java-tutorial && cd ksmsdk-java-tutorial && mkdir -p src/main/java/com/keepersecurity/ksmsdk/javatutorial src/test/java/com/keepersecurity/ksmsdk/javatutorial`{{execute}}
 
 This creates a new directory `ksmsdk-java-tutorial` with the standard Gradle Java project structure.
@@ -24,40 +16,6 @@ This creates a new directory `ksmsdk-java-tutorial` with the standard Gradle Jav
 
 Create a `build.gradle` file in the project root with the KSM Java SDK dependency:
 
-```bash
-cat > build.gradle << 'EOF'
-plugins {
-    id 'java'
-    id 'application'
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    // Use the latest version of the Keeper Secrets Manager SDK for Java
-    implementation 'com.keepersecurity.secrets-manager:core:+' // '+' fetches the latest version
-}
-
-application {
-    // Define the main class for the application.
-    // This will be set dynamically when running specific examples.
-    mainClass = project.hasProperty("mainClass") ? project.getProperty("mainClass") : "com.keepersecurity.ksmsdk.javatutorial.ListAllSecrets"
-}
-
-// Ensure UTF-8 encoding for cross-platform compatibility
-compileJava {
-    options.encoding = 'UTF-8'
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-EOF
-```
 `cat > build.gradle << 'EOF'
 plugins {
     id 'java'
@@ -89,13 +47,8 @@ EOF`{{execute}}
 
 ### Create `settings.gradle`
 
-Also create a `settings.gradle` file to define the project name:
+Create a `settings.gradle` file to define the project name:
 
-```bash
-cat > settings.gradle << 'EOF'
-rootProject.name = 'ksmsdk-java-tutorial'
-EOF
-```
 `cat > settings.gradle << 'EOF'
 rootProject.name = 'ksmsdk-java-tutorial'
 EOF`{{execute}}
@@ -129,13 +82,9 @@ Let's create a Java class to connect to KSM and list all secrets shared with you
 
 ### Create the Java File
 
-Ensure you are in the `ksmsdk-java-tutorial` directory.
+Create the `ListAllSecrets.java` file:
 
-```bash
-mkdir -p src/main/java/com/keepersecurity/ksmsdk/javatutorial
-touch src/main/java/com/keepersecurity/ksmsdk/javatutorial/ListAllSecrets.java
-```
-`mkdir -p src/main/java/com/keepersecurity/ksmsdk/javatutorial && touch src/main/java/com/keepersecurity/ksmsdk/javatutorial/ListAllSecrets.java`{{execute}}
+`touch src/main/java/com/keepersecurity/ksmsdk/javatutorial/ListAllSecrets.java`{{execute}}
 
 ### Add the Java Code
 
@@ -213,11 +162,8 @@ public class ListAllSecrets {
 
 ## 5. Run the Application
 
-Execute the Java application using Gradle. This command compiles and runs your `ListAllSecrets` class.
+Execute the Java application using Gradle:
 
-```bash
-gradle -PmainClass=com.keepersecurity.ksmsdk.javatutorial.ListAllSecrets run --console=plain
-```
 `gradle -PmainClass=com.keepersecurity.ksmsdk.javatutorial.ListAllSecrets run --console=plain`{{execute}}
 
 ### Expected Output:
