@@ -187,13 +187,13 @@ This concludes the KSM Java SDK tutorial! Refer to the `finish.md` tab for a sum
 ### Folder Operations
 
 ```
-touch src/main/java/com/keepersecurity/ksmsample/KSMFolderOperations.java
+touch src/main/java/com/keepersecurity/ksmsdk/javatutorial/KSMFolderOperations.java
 ```{{execute}}
 
 #### Place this code in the created file:
 
 ```java
-package com.keepersecurity.ksmsample;
+package com.keepersecurity.ksmsdk.javatutorial;
 
 import com.keepersecurity.secretsManager.core.*;
 import java.util.List;
@@ -311,7 +311,7 @@ Replace the following placeholders in the code:
 Run the code to list existing folders:
 
 ```
-gradle -PmainClass=com.keepersecurity.ksmsample.KSMFolderOperations run
+gradle -PmainClass=com.keepersecurity.ksmsdk.javatutorial.KSMFolderOperations run
 ```{{execute}}
 
 ### 4. Create a New Folder
@@ -319,7 +319,7 @@ gradle -PmainClass=com.keepersecurity.ksmsample.KSMFolderOperations run
 Run the code to create a new folder:
 
 ```
-gradle -PmainClass=com.keepersecurity.ksmsample.KSMFolderOperations run --args="create"
+gradle -PmainClass=com.keepersecurity.ksmsdk.javatutorial.KSMFolderOperations run --args="create"
 ```{{execute}}
 
 ### 5. Update Folder Name
@@ -327,5 +327,5 @@ gradle -PmainClass=com.keepersecurity.ksmsample.KSMFolderOperations run --args="
 Run the code to update a folder's name:
 
 ```
-gradle -PmainClass=com.keepersecurity.ksmsample.KSMFolderOperations run --args="update"
+gradle -PmainClass=com.keepersecurity.ksmsdk.javatutorial.KSMFolderOperations run --args="update"
 ```{{execute}}
