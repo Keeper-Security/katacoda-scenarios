@@ -39,6 +39,17 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
+# Helper method to format file sizes
+def format_bytes(bytes)
+  return "0 B" if bytes == 0
+
+  units = ['B', 'KB', 'MB', 'GB']
+  exp = (Math.log(bytes) / Math.log(1024)).floor
+  exp = [exp, units.length - 1].min
+
+  "%.2f %s" % [bytes.to_f / (1024 ** exp), units[exp]]
+end
+
 puts "Listing Files in Secrets"
 puts "=" * 60
 puts ""
@@ -76,16 +87,7 @@ rescue KeeperSecretsManager::Error => e
   puts "ERROR: #{e.message}"
 end
 
-def format_bytes(bytes)
-  return "0 B" if bytes == 0
-
-  units = ['B', 'KB', 'MB', 'GB']
-  exp = (Math.log(bytes) / Math.log(1024)).floor
-  exp = [exp, units.length - 1].min
-
-  "%.2f %s" % [bytes.to_f / (1024 ** exp), units[exp]]
-end
-
+puts ""
 puts "=" * 60
 puts "File listing complete"
 EOF
@@ -97,9 +99,9 @@ Now run the script:
 ruby list_files.rb
 ```{{execute}}
 
-**✅ Expected Output:**
+**Expected Output:**
 ```
-📎 Listing Files in Secrets
+Listing Files in Secrets
 ============================================================
 
 Found 2 secret(s) with attached files
@@ -107,12 +109,12 @@ Found 2 secret(s) with attached files
 Secret: Production SSL Certificate
   UID: lPxZXk...
   Files:
-    📄 server.crt
+    server.crt
        File UID: mQyAYl...
        Size: 1.45 KB
        Type: application/x-pem-file
 
-    📄 server.key
+    server.key
        File UID: nRzBZm...
        Size: 1.68 KB
        Type: application/x-pem-file
@@ -120,13 +122,13 @@ Secret: Production SSL Certificate
 Secret: SSH Keys
   UID: oSaBCn...
   Files:
-    📄 id_rsa
+    id_rsa
        File UID: pTbCDo...
        Size: 2.37 KB
        Type: application/octet-stream
 
 ============================================================
-✅ File listing complete
+File listing complete
 ```
 
 ## 2. Uploading Files to Secrets
@@ -334,7 +336,7 @@ Now run the script:
 ruby download_files.rb
 ```{{execute}}
 
-**✅ Expected Output:**
+**Expected Output:**
 ```
 📥 Downloading Files from Secret
 ============================================================
@@ -343,31 +345,32 @@ Secret: Production SSL Certificate
 Files: 2
 
 1. Downloading: server.crt
-   ✅ Saved to: /tmp/ksm_downloads/server.crt
+   Saved to: /tmp/ksm_downloads/server.crt
    Size: 1485 bytes
    Type: application/x-pem-file
 
-   📄 Preview:
+   Preview:
       -----BEGIN CERTIFICATE-----
       MIIDXTCCAkWgAwIBAgIJAKZ...
       -----END CERTIFICATE-----
 
 2. Downloading: server.key
-   ✅ Saved to: /tmp/ksm_downloads/server.key
+   Saved to: /tmp/ksm_downloads/server.key
    Size: 1720 bytes
    Type: application/x-pem-file
 
-✅ All files downloaded to: /tmp/ksm_downloads
+All files downloaded to: /tmp/ksm_downloads
 
 ============================================================
-✅ File download complete
+File download complete
 ```
 
 ## 4. Managing Multiple Files
 
-Handle secrets with multiple attached files:
+Handle secrets with multiple attached files. Create the `manage_multiple_files.rb` file:
 
-```ruby
+```
+cat > manage_multiple_files.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -461,13 +464,21 @@ end
 
 puts ""
 puts "=" * 60
-```{{copy}}
+EOF
+```{{execute}}
+
+Now run the script:
+
+```bash
+ruby manage_multiple_files.rb
+```{{execute}}
 
 ## 5. Complete File Workflow Example
 
-A real-world example: SSL certificate management:
+A real-world example: SSL certificate management. Create the `ssl_workflow.rb` file:
 
-```ruby
+```
+cat > ssl_workflow.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -574,9 +585,17 @@ end
 
 puts ""
 puts "=" * 60
-```{{copy}}
+EOF
+```{{execute}}
 
-## 🔍 Understanding File Operations
+Set your folder UID and run:
+
+```bash
+export FOLDER_UID="your-folder-uid-here"
+ruby ssl_workflow.rb
+```{{execute}}
+
+## Understanding File Operations
 
 ### File Upload Process:
 1. SDK encrypts file data with a generated file key
@@ -594,7 +613,7 @@ puts "=" * 60
 
 ## 🔒 Security Best Practices
 
-✅ **DO:**
+**DO:**
 - Encrypt files before uploading (SDK does this automatically)
 - Use descriptive file titles and names
 - Delete files from disk after processing
