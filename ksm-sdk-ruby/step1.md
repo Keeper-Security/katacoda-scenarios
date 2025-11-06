@@ -55,7 +55,78 @@ A token in the format `US:BASE64_STRING` that is bound once to create a persiste
 
 ## 3. Create Your First Connection Script
 
-Let's create a simple Ruby script to connect and list secrets. Create a file called `connect.rb`:
+Let's create a simple Ruby script to connect and list secrets. Create the `connect.rb` file:
+
+```
+cat > connect.rb << 'EOF'
+#!/usr/bin/env ruby
+
+require 'keeper_secrets_manager'
+
+puts "Keeper Secrets Manager - Ruby SDK Demo"
+puts "=" * 50
+puts ""
+
+# SECURITY WARNING
+# Replace [YOUR_BASE64_CONFIG_HERE] with your actual test configuration
+# NEVER use production credentials in tutorials!
+# NEVER commit this config to version control!
+
+KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
+
+begin
+  # Step 1: Initialize storage with base64 configuration
+  puts "Connecting to Keeper Secrets Manager..."
+  storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
+
+  # Step 2: Create the SecretsManager client
+  secrets_manager = KeeperSecretsManager.new(config: storage)
+
+  puts "Successfully connected!"
+  puts ""
+
+  # Step 3: Retrieve all secrets
+  puts "Fetching secrets..."
+  secrets = secrets_manager.get_secrets
+
+  puts "Found #{secrets.length} secret(s)"
+  puts ""
+
+  # Step 4: Display basic information
+  if secrets.any?
+    puts "Your Secrets:"
+    puts "-" * 50
+
+    secrets.each_with_index do |secret, index|
+      puts "#{index + 1}. #{secret.title}"
+      puts "   UID: #{secret.uid}"
+      puts "   Type: #{secret.type}"
+      puts ""
+    end
+  else
+    puts "WARNING: No secrets found. Create some secrets in Keeper first."
+  end
+
+rescue KeeperSecretsManager::Error => e
+  puts "ERROR: KSM Error: #{e.message}"
+  puts ""
+  puts "Troubleshooting:"
+  puts "- Verify your base64 config is correct"
+  puts "- Check your KSM application has access to secrets"
+  puts "- Ensure your configuration hasn't expired"
+  exit 1
+
+rescue StandardError => e
+  puts "ERROR: Unexpected Error: #{e.class} - #{e.message}"
+  exit 1
+end
+
+puts "=" * 50
+puts "Connection successful! Ready for Step 2."
+EOF
+```{{execute}}
+
+**Code reference** (for copying/editing):
 
 ```ruby
 #!/usr/bin/env ruby

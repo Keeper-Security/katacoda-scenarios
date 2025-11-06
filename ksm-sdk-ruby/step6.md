@@ -28,9 +28,10 @@ In this step, you'll learn how to:
 
 ## 1. Robust Error Handling
 
-Implement comprehensive error handling:
+Implement comprehensive error handling. Create the `production_errors.rb` file:
 
-```ruby
+```
+cat > production_errors.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -168,9 +169,10 @@ end
 puts ""
 puts "=" * 60
 puts "Error handling example complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `production_errors.rb` and run:
+Now run the script:
 
 ```bash
 ruby production_errors.rb

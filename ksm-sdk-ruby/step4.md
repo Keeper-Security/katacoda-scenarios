@@ -26,9 +26,10 @@ In this step, you'll learn how to:
 
 ## 1. Listing All Folders
 
-Let's start by exploring your folder structure:
+Let's start by exploring your folder structure. Create the `list_folders.rb` file:
 
-```ruby
+```
+cat > list_folders.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -95,9 +96,10 @@ end
 puts ""
 puts "=" * 60
 puts "Folder listing complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `list_folders.rb` and run:
+Now run the script:
 
 ```bash
 ruby list_folders.rb
@@ -137,9 +139,10 @@ ruby list_folders.rb
 
 ## 2. Creating Folders
 
-Create new folders in your shared folder structure:
+Create new folders in your shared folder structure. Create the `create_folder.rb` file:
 
-```ruby
+```
+cat > create_folder.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -210,9 +213,10 @@ end
 puts ""
 puts "=" * 60
 puts "Folder creation complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `create_folder.rb` and run:
+Now run the script:
 
 ```bash
 ruby create_folder.rb

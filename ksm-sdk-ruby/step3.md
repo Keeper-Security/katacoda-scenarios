@@ -43,9 +43,10 @@ Save a folder UID - you'll need it for creating records!
 
 ## 1. Creating a Simple Login Record
 
-Let's create a basic login record with common fields:
+Let's create a basic login record with common fields. Create the `create_simple.rb` file:
 
-```ruby
+```
+cat > create_simple.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -118,7 +119,8 @@ end
 puts ""
 puts "=" * 60
 puts "Record creation example complete"
-```{{copy}}
+EOF
+```{{execute}}
 
 Set your folder UID and run:
 
@@ -148,9 +150,10 @@ Creating record in folder: lPxZXk...
 
 ## 2. Creating Complex Records with Multiple Field Types
 
-Now let's create a record with advanced field types:
+Now let's create a record with advanced field types. Create the `create_complex.rb` file:
 
-```ruby
+```
+cat > create_complex.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -272,9 +275,10 @@ end
 puts ""
 puts "=" * 60
 puts "Complex record creation complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `create_complex.rb` and run:
+Now run the script:
 
 ```bash
 ruby create_complex.rb
@@ -282,9 +286,10 @@ ruby create_complex.rb
 
 ## 3. Updating Existing Records
 
-Let's update a secret's fields:
+Let's update a secret's fields. Create the `update_record.rb` file:
 
-```ruby
+```
+cat > update_record.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -373,9 +378,10 @@ end
 puts ""
 puts "=" * 60
 puts "Record update example complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `update_record.rb` and run:
+Now run the script:
 
 ```bash
 ruby update_record.rb

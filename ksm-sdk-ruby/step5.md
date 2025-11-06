@@ -26,9 +26,10 @@ In this step, you'll learn how to:
 
 ## 1. Viewing Files Attached to Secrets
 
-First, let's see what files are already attached:
+First, let's see what files are already attached. Create the `list_files.rb` file:
 
-```ruby
+```
+cat > list_files.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -87,9 +88,10 @@ end
 
 puts "=" * 60
 puts "File listing complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `list_files.rb` and run:
+Now run the script:
 
 ```bash
 ruby list_files.rb
@@ -129,9 +131,10 @@ Secret: SSH Keys
 
 ## 2. Uploading Files to Secrets
 
-Upload files and attach them to records:
+Upload files and attach them to records. Create the `upload_file.rb` file:
 
-```ruby
+```
+cat > upload_file.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -229,9 +232,10 @@ end
 puts ""
 puts "=" * 60
 puts "File upload complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `upload_file.rb` and run:
+Now run the script:
 
 ```bash
 ruby upload_file.rb
@@ -239,9 +243,10 @@ ruby upload_file.rb
 
 ## 3. Downloading Files from Secrets
 
-Download and save files locally:
+Download and save files locally. Create the `download_files.rb` file:
 
-```ruby
+```
+cat > download_files.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -320,9 +325,10 @@ end
 puts ""
 puts "=" * 60
 puts "File download complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `download_files.rb` and run:
+Now run the script:
 
 ```bash
 ruby download_files.rb

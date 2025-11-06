@@ -25,9 +25,10 @@ In this step, you'll learn how to:
 
 ## 1. Basic Field Access
 
-Let's create a script to read common fields from a secret:
+Let's create a script to read common fields from a secret. Create the `read_fields.rb` file:
 
-```ruby
+```
+cat > read_fields.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -107,9 +108,10 @@ end
 puts ""
 puts "=" * 60
 puts "Field access demonstration complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save this as `read_fields.rb` and run it:
+Now run the script:
 
 ```bash
 ruby read_fields.rb
@@ -147,9 +149,10 @@ Secret: Production Database
 
 ## 2. Searching Secrets by Title
 
-Often you need to find a specific secret by name:
+Often you need to find a specific secret by name. Create the `search_secrets.rb` file:
 
-```ruby
+```
+cat > search_secrets.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -196,9 +199,10 @@ if matching.any?
 else
   puts "WARNING: No secrets found matching 'Database'"
 end
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `search_secrets.rb` and run:
+Now run the script:
 
 ```bash
 ruby search_secrets.rb
@@ -206,9 +210,10 @@ ruby search_secrets.rb
 
 ## 3. Working with Different Field Types
 
-The KSM Ruby SDK supports many field types. Here's how to work with them:
+The KSM Ruby SDK supports many field types. Create the `field_types.rb` file:
 
-```ruby
+```
+cat > field_types.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -284,9 +289,10 @@ end
 
 puts "=" * 60
 puts "Field type examples complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `field_types.rb` and run:
+Now run the script:
 
 ```bash
 ruby field_types.rb
@@ -294,9 +300,10 @@ ruby field_types.rb
 
 ## 4. Using Notation for Direct Access
 
-KSM provides a notation system for accessing specific fields directly:
+KSM provides a notation system for accessing specific fields directly. Create the `notation_demo.rb` file:
 
-```ruby
+```
+cat > notation_demo.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -349,9 +356,10 @@ end
 puts ""
 puts "=" * 60
 puts "Notation examples complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `notation_demo.rb` and run:
+Now run the script:
 
 ```bash
 ruby notation_demo.rb
