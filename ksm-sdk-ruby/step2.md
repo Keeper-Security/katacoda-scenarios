@@ -63,7 +63,7 @@ begin
   puts "Common Fields:"
   puts "  Login:    #{secret.login || '(not set)'}"
   puts "  Password: #{'*' * 12} (hidden)"
-  puts "  URL:      #{secret.url&.first || '(not set)'}"
+  puts "  URL:      #{secret.url || '(not set)'}"
   puts ""
 
   # Access fields directly
@@ -119,32 +119,32 @@ ruby read_fields.rb
 
 **✅ Expected Output:**
 ```
-🔍 Reading Secret Fields
+Reading Secret Fields
 ============================================================
 
 Secret: Production Database
 ------------------------------------------------------------
 
-📋 Common Fields:
+Common Fields:
   Login:    db_admin
   Password: ************ (hidden)
-  URL:      https://db.example.com:5432
+  URL:      https://db.example.com
 
-📦 All Fields:
+All Fields:
   login: db_admin
   password: ************ (hidden)
-  url: https://db.example.com:5432
-  url: https://db-replica.example.com:5432
+  url: https://db.example.com
+  host: xxxxxx.rds.amazonaws.com
 
-🔧 Custom Fields:
+Custom Fields:
   Environment: production
   Owner: DevOps Team
 
-📝 Notes:
+Notes:
   Primary PostgreSQL database. Rotate password quarterly...
 
 ============================================================
-✅ Field access demonstration complete
+Field access demonstration complete
 ```
 
 ## 2. Searching Secrets by Title
@@ -369,9 +369,20 @@ ruby notation_demo.rb
 
 ### Direct Property Access
 ```ruby
-secret.login      # Returns first login field value
-secret.password   # Returns first password field value
-secret.url        # Returns array of URL values
+# Convenience methods return the FIRST value as a String
+secret.login      # Returns first login field value (String)
+secret.password   # Returns first password field value (String)
+secret.url        # Returns first URL field value (String)
+```
+
+### Using get_field_value (for multiple values)
+```ruby
+# Returns ALL values as an Array
+urls = secret.get_field_value('url')
+# => ["https://db.example.com", "https://db-replica.example.com"]
+
+# To get all URLs:
+urls.each { |url| puts url }
 ```
 
 ### Using get_field_value_single
@@ -386,7 +397,7 @@ phone = secret.get_field_value_single('phone')
 # Access all fields directly
 secret.fields.each do |field|
   type = field['type']
-  value = field['value']  # Usually an array
+  value = field['value']  # Always an array
 end
 ```
 
