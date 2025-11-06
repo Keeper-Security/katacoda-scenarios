@@ -38,7 +38,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "📁 Listing Folders"
+puts "Listing Folders"
 puts "=" * 60
 puts ""
 
@@ -46,11 +46,11 @@ begin
   # Get all folders
   folders = secrets_manager.get_folders
 
-  puts "✅ Found #{folders.length} folder(s)"
+  puts "Found #{folders.length} folder(s)"
   puts ""
 
   if folders.empty?
-    puts "⚠️  No folders accessible to this KSM application"
+    puts "WARNING: No folders accessible to this KSM application"
     puts "Share a folder with your KSM app in Keeper Vault first"
   else
     folders.each_with_index do |folder, index|
@@ -65,36 +65,36 @@ begin
     end
 
     # Show folder hierarchy
-    puts "📊 Folder Hierarchy:"
+    puts "Folder Hierarchy:"
     puts "-" * 60
 
     # Find root folders (no parent)
     root_folders = folders.select { |f| f.parent_uid.nil? || f.parent_uid.empty? }
 
     root_folders.each do |root|
-      puts "📁 #{root.name} (#{root.uid})"
+      puts "[Folder] #{root.name} (#{root.uid})"
 
       # Find children
       children = folders.select { |f| f.parent_uid == root.uid }
       children.each do |child|
-        puts "  └─ 📁 #{child.name} (#{child.uid})"
+        puts "  └─ [Folder] #{child.name} (#{child.uid})"
 
         # Find grandchildren
         grandchildren = folders.select { |f| f.parent_uid == child.uid }
         grandchildren.each do |grandchild|
-          puts "     └─ 📁 #{grandchild.name} (#{grandchild.uid})"
+          puts "     └─ [Folder] #{grandchild.name} (#{grandchild.uid})"
         end
       end
     end
   end
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ KSM Error: #{e.message}"
+  puts "ERROR: KSM Error: #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Folder listing complete"
+puts "Folder listing complete"
 ```{{copy}}
 
 Save as `list_folders.rb` and run:
@@ -149,7 +149,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🆕 Creating New Folders"
+puts "Creating New Folders"
 puts "=" * 60
 puts ""
 
@@ -158,7 +158,7 @@ begin
   folders = secrets_manager.get_folders
 
   if folders.empty?
-    puts "❌ No folders found. You need at least one shared folder to create subfolders."
+    puts "ERROR: No folders found. You need at least one shared folder to create subfolders."
     exit 1
   end
 
@@ -179,7 +179,7 @@ begin
     parent_uid: parent_folder.uid
   )
 
-  puts "✅ Folder created successfully!"
+  puts "Folder created successfully!"
   puts "   UID: #{folder_uid}"
   puts ""
 
@@ -190,17 +190,17 @@ begin
   new_folder = updated_folders.find { |f| f.uid == folder_uid }
 
   if new_folder
-    puts "🔍 Verification:"
+    puts "Verification:"
     puts "   Name: #{new_folder.name}"
     puts "   UID: #{new_folder.uid}"
     puts "   Parent: #{new_folder.parent_uid}"
   end
 
 rescue ArgumentError => e
-  puts "❌ Validation Error: #{e.message}"
+  puts "ERROR: Validation Error: #{e.message}"
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ KSM Error: #{e.message}"
+  puts "ERROR: KSM Error: #{e.message}"
   puts ""
   puts "Common issues:"
   puts "- Ensure parent_uid is a valid folder UID"
@@ -209,7 +209,7 @@ end
 
 puts ""
 puts "=" * 60
-puts "✅ Folder creation complete"
+puts "Folder creation complete"
 ```{{copy}}
 
 Save as `create_folder.rb` and run:
@@ -232,7 +232,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "✏️  Updating Folder Name"
+puts "Updating Folder Name"
 puts "=" * 60
 puts ""
 
@@ -244,7 +244,7 @@ begin
   demo_folder = folders.find { |f| f.name.include?('Ruby SDK Demo') }
 
   if demo_folder.nil?
-    puts "⚠️  No demo folder found to rename"
+    puts "WARNING: No demo folder found to rename"
     puts "Create one first with create_folder.rb"
     exit 0
   end
@@ -260,7 +260,7 @@ begin
 
   secrets_manager.update_folder(demo_folder.uid, new_name)
 
-  puts "✅ Folder name updated!"
+  puts "Folder name updated!"
   puts ""
 
   # Verify
@@ -269,17 +269,17 @@ begin
   updated_folder = updated_folders.find { |f| f.uid == demo_folder.uid }
 
   if updated_folder
-    puts "🔍 Verification:"
+    puts "Verification:"
     puts "   New name: #{updated_folder.name}"
   end
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Folder update complete"
+puts "Folder update complete"
 ```{{copy}}
 
 ## 4. Working with Folder Hierarchy
@@ -296,7 +296,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🗂️  Folder Hierarchy Navigation"
+puts "Folder Hierarchy Navigation"
 puts "=" * 60
 puts ""
 
@@ -318,7 +318,7 @@ begin
   end
 
   # Find folder by name
-  puts "🔍 Search by Name:"
+  puts "Search by Name:"
   puts "-" * 60
 
   search_name = "Production"
@@ -333,12 +333,12 @@ begin
   end
 
 rescue StandardError => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Hierarchy navigation complete"
+puts "Hierarchy navigation complete"
 ```{{copy}}
 
 ## 5. Creating Secrets in Specific Folders
@@ -355,7 +355,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "📁➕ Create Folder and Add Secrets"
+puts "Create Folder and Add Secrets"
 puts "=" * 60
 puts ""
 
@@ -365,7 +365,7 @@ begin
   parent_folder = folders.first
 
   if parent_folder.nil?
-    puts "❌ No folders available"
+    puts "ERROR: No folders available"
     exit 1
   end
 
@@ -378,7 +378,7 @@ begin
     parent_uid: parent_folder.uid
   )
 
-  puts "   ✅ Folder created: #{folder_uid}"
+  puts "   Folder created: #{folder_uid}"
   puts ""
 
   sleep 1
@@ -400,16 +400,16 @@ begin
     options.folder_uid = folder_uid
 
     record_uid = secrets_manager.create_secret(record_data, options)
-    puts "   ✅ Created: App Secret #{i + 1} (#{record_uid})"
+    puts "   Created: App Secret #{i + 1} (#{record_uid})"
 
     sleep 0.5
   end
 
   puts ""
-  puts "✅ Folder and secrets created successfully!"
+  puts "Folder and secrets created successfully!"
 
 rescue StandardError => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""
@@ -430,7 +430,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🗑️  Deleting Folders"
+puts "Deleting Folders"
 puts "=" * 60
 puts ""
 
@@ -442,7 +442,7 @@ begin
   demo_folders = folders.select { |f| f.name.include?('Ruby SDK Demo') || f.name.include?('App Secrets') }
 
   if demo_folders.empty?
-    puts "⚠️  No demo folders to delete"
+    puts "WARNING: No demo folders to delete"
     exit 0
   end
 
@@ -456,22 +456,22 @@ begin
   puts "Deleting folders..."
   deleted = secrets_manager.delete_folder(folder_uids, force: true)
 
-  puts "✅ Deleted #{deleted.length} folder(s)"
+  puts "Deleted #{deleted.length} folder(s)"
 
   deleted.each do |uid|
     folder = demo_folders.find { |f| f.uid == uid }
-    puts "   ✅ Deleted: #{folder&.name || uid}"
+    puts "   Deleted: #{folder&.name || uid}"
   end
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
   puts ""
   puts "Note: Folders with records require force: true"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Folder deletion complete"
+puts "Folder deletion complete"
 ```{{copy}}
 
 **⚠️ Security Warning**: Always verify folders before deletion in production!

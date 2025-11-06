@@ -56,7 +56,7 @@ FOLDER_UID = ENV['FOLDER_UID'] || "[YOUR_FOLDER_UID_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🆕 Creating a New Secret"
+puts "Creating a New Secret"
 puts "=" * 60
 puts ""
 
@@ -83,7 +83,7 @@ begin
   # Create the secret
   record_uid = secrets_manager.create_secret(record_data, options)
 
-  puts "✅ Secret created successfully!"
+  puts "Secret created successfully!"
   puts "   UID: #{record_uid}"
   puts ""
 
@@ -93,31 +93,31 @@ begin
   created_secret = secrets_manager.get_secrets([record_uid]).first
 
   if created_secret
-    puts "🔍 Verification:"
+    puts "Verification:"
     puts "   Title: #{created_secret.title}"
     puts "   Login: #{created_secret.login}"
     puts "   Password: #{'*' * 12} (hidden)"
     puts "   URL: #{created_secret.url&.first}"
   else
-    puts "⚠️  Could not verify - secret may take a moment to sync"
+    puts "WARNING: Could not verify - secret may take a moment to sync"
   end
 
 rescue ArgumentError => e
-  puts "❌ Validation Error: #{e.message}"
+  puts "ERROR: Validation Error: #{e.message}"
   puts ""
   puts "Make sure you set FOLDER_UID environment variable!"
   puts "Run: export FOLDER_UID='your-folder-uid-here'"
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ KSM Error: #{e.message}"
+  puts "ERROR: KSM Error: #{e.message}"
 
 rescue StandardError => e
-  puts "❌ Error: #{e.class} - #{e.message}"
+  puts "ERROR: #{e.class} - #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Record creation example complete"
+puts "Record creation example complete"
 ```{{copy}}
 
 Set your folder UID and run:
@@ -161,7 +161,7 @@ FOLDER_UID = ENV['FOLDER_UID'] || "[YOUR_FOLDER_UID_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🎯 Creating Complex Record with Multiple Field Types"
+puts "Creating Complex Record with Multiple Field Types"
 puts "=" * 60
 puts ""
 
@@ -247,7 +247,7 @@ begin
   puts "Creating complex record..."
   record_uid = secrets_manager.create_secret(record, options)
 
-  puts "✅ Complex record created!"
+  puts "Complex record created!"
   puts "   UID: #{record_uid}"
   puts ""
 
@@ -256,7 +256,7 @@ begin
   created = secrets_manager.get_secrets([record_uid]).first
 
   if created
-    puts "🔍 Verification:"
+    puts "Verification:"
     puts "   Title: #{created.title}"
     puts "   Login: #{created.login}"
     puts "   Phone: #{created.get_field_value_single('phone')&.dig('number')}"
@@ -266,12 +266,12 @@ begin
   end
 
 rescue StandardError => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Complex record creation complete"
+puts "Complex record creation complete"
 ```{{copy}}
 
 Save as `create_complex.rb` and run:
@@ -294,7 +294,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "✏️  Updating Secret Fields"
+puts "Updating Secret Fields"
 puts "=" * 60
 puts ""
 
@@ -303,7 +303,7 @@ begin
   secrets = secrets_manager.get_secrets
 
   if secrets.empty?
-    puts "❌ No secrets found to update"
+    puts "ERROR: No secrets found to update"
     exit 0
   end
 
@@ -315,14 +315,14 @@ begin
   puts ""
 
   # Display current values
-  puts "📋 Current Values:"
+  puts "Current Values:"
   puts "   Login: #{secret.login || '(not set)'}"
   puts "   Password: #{'*' * 12}"
   puts "   URL: #{secret.url&.first || '(not set)'}"
   puts ""
 
   # Update fields
-  puts "🔄 Applying updates..."
+  puts "Applying updates..."
 
   secret.login = "updated_#{secret.login || 'user'}"
   secret.password = "NewP@ssw0rd!#{rand(1000..9999)}"
@@ -347,32 +347,32 @@ begin
   # Perform the update
   secrets_manager.update_secret(secret)
 
-  puts "✅ Update successful!"
+  puts "Update successful!"
   puts ""
 
   # Verify the update
   sleep 1
   updated_secret = secrets_manager.get_secrets([secret.uid]).first
 
-  puts "📋 New Values:"
+  puts "New Values:"
   puts "   Login: #{updated_secret.login}"
   puts "   Password: #{'*' * 12} (changed)"
   puts "   URL: #{updated_secret.url&.first}"
   puts "   Last Updated: #{updated_secret.custom&.find { |f| f['label'] == 'Last Updated' }&.dig('value', 0)}"
 
 rescue KeeperSecretsManager::RecordNotFoundError => e
-  puts "❌ Record not found: #{e.message}"
+  puts "ERROR: Record not found: #{e.message}"
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ KSM Error: #{e.message}"
+  puts "ERROR: KSM Error: #{e.message}"
 
 rescue StandardError => e
-  puts "❌ Error: #{e.class} - #{e.message}"
+  puts "ERROR: #{e.class} - #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Record update example complete"
+puts "Record update example complete"
 ```{{copy}}
 
 Save as `update_record.rb` and run:
@@ -421,7 +421,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🔄 Bulk Update Pattern"
+puts "Bulk Update Pattern"
 puts "=" * 60
 puts ""
 
@@ -449,16 +449,16 @@ begin
 
     # Update
     secrets_manager.update_secret(secret)
-    puts "   ✅ Updated"
+    puts "   Updated"
 
     sleep 0.5  # Rate limiting - be nice to the API
   end
 
   puts ""
-  puts "✅ Bulk update complete!"
+  puts "Bulk update complete!"
 
 rescue StandardError => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""

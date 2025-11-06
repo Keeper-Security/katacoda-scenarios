@@ -131,7 +131,7 @@ class KSMClientWrapper
 end
 
 # Usage example
-puts "🛡️  Production Error Handling Example"
+puts "Production Error Handling Example"
 puts "=" * 60
 puts ""
 
@@ -151,23 +151,23 @@ begin
     secret = client.get_secret_safely(uid)
 
     if secret
-      puts "✅ Secret retrieved: #{secret.title}"
+      puts "Secret retrieved: #{secret.title}"
 
       # Safely get fields
       login = client.get_secret_field_safely(uid, 'login')
       puts "   Login: #{login || '(not set)'}"
     end
   else
-    puts "⚠️  No secrets available"
+    puts "WARNING: No secrets available"
   end
 
 rescue => e
-  puts "❌ Fatal error: #{e.message}"
+  puts "ERROR: Fatal error: #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Error handling example complete"
+puts "Error handling example complete"
 ```{{copy}}
 
 Save as `production_errors.rb` and run:
@@ -210,19 +210,19 @@ class CachedKSMClient
         cache_age = Time.now - File.mtime(cache_file)
 
         if cache_age < CACHE_TTL
-          puts "📦 Using cached secrets (age: #{cache_age.to_i}s)"
+          puts "Using cached secrets (age: #{cache_age.to_i}s)"
 
           cache_data = JSON.parse(File.read(cache_file))
           return cache_data['secrets'].map { |s| reconstruct_secret(s) }
         else
-          puts "⏰ Cache expired (age: #{cache_age.to_i}s > #{CACHE_TTL}s)"
+          puts "Cache expired (age: #{cache_age.to_i}s > #{CACHE_TTL}s)"
         end
       end
     end
 
     # Fetch from KSM
     begin
-      puts "🌐 Fetching from Keeper Secrets Manager..."
+      puts "Fetching from Keeper Secrets Manager..."
 
       secrets = @secrets_manager.get_secrets
 
@@ -238,23 +238,23 @@ class CachedKSMClient
 
       File.chmod(0600, cache_file)  # Secure permissions
 
-      puts "✅ Fetched #{secrets.length} secrets and cached"
+      puts "Fetched #{secrets.length} secrets and cached"
 
       secrets
 
     rescue => e
       # Fallback to cache on error
       if File.exist?(cache_file)
-        puts "⚠️  Network error, using stale cache: #{e.message}"
+        puts "WARNING: Network error, using stale cache: #{e.message}"
 
         cache_data = JSON.parse(File.read(cache_file))
         cache_age = Time.now.to_i - cache_data['timestamp']
 
-        puts "📦 Using cached data (#{cache_age}s old)"
+        puts "Using cached data (#{cache_age}s old)"
 
         return cache_data['secrets'].map { |s| reconstruct_secret(s) }
       else
-        puts "❌ No cache available and network failed"
+        puts "ERROR: No cache available and network failed"
         raise
       end
     end
@@ -263,7 +263,7 @@ class CachedKSMClient
   def clear_cache
     cache_file = File.join(CACHE_DIR, 'secrets_cache.json')
     File.delete(cache_file) if File.exist?(cache_file)
-    puts "🗑️  Cache cleared"
+    puts "Cache cleared"
   end
 
   private
@@ -294,7 +294,7 @@ class CachedKSMClient
 end
 
 # Usage example
-puts "💾 Caching for Offline Resilience"
+puts "Caching for Offline Resilience"
 puts "=" * 60
 puts ""
 
@@ -328,12 +328,12 @@ begin
   end
 
 rescue => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Caching example complete"
+puts "Caching example complete"
 ```{{copy}}
 
 Save as `caching_example.rb` and run:
@@ -488,7 +488,7 @@ class ProductionKSMClient
 end
 
 # Usage example
-puts "📊 Production Logging Example"
+puts "Production Logging Example"
 puts "=" * 60
 puts ""
 
@@ -504,7 +504,7 @@ begin
   # List secrets with audit
   secrets = client.list_secrets_with_audit
 
-  puts "✅ Found #{secrets.length} secrets"
+  puts "Found #{secrets.length} secrets"
   puts ""
 
   # Get specific secret with audit
@@ -517,12 +517,12 @@ begin
     )
 
     if secret
-      puts "✅ Retrieved: #{secret.title}"
+      puts "Retrieved: #{secret.title}"
     end
   end
 
   puts ""
-  puts "📄 Log files created:"
+  puts "Log files created:"
   puts "   /tmp/ksm.log - Application logs"
   puts "   /tmp/ksm_audit.log - Audit trail (JSON format)"
 
@@ -532,12 +532,12 @@ begin
   puts "   tail -f /tmp/ksm_audit.log | jq"
 
 rescue => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Logging example complete"
+puts "Logging example complete"
 ```{{copy}}
 
 Save as `logging_example.rb` and run:
@@ -604,7 +604,7 @@ class KSMConfigManager
 end
 
 # Usage example
-puts "⚙️  Configuration Management Example"
+puts "Configuration Management Example"
 puts "=" * 60
 puts ""
 
@@ -614,25 +614,25 @@ begin
   # Initialize client from environment or file
   secrets_manager = KSMConfigManager.initialize_client
 
-  puts "✅ KSM client initialized"
+  puts "KSM client initialized"
   puts ""
 
   # Verify connectivity
   secrets = secrets_manager.get_secrets
 
-  puts "✅ Connected successfully"
+  puts "Connected successfully"
   puts "   Accessible secrets: #{secrets.length}"
 
   puts ""
-  puts "💡 Configuration Priority:"
+  puts "Configuration Priority:"
   puts "   1. KSM_CONFIG environment variable (highest)"
   puts "   2. #{KSMConfigManager::CONFIG_FILE} config file"
   puts "   3. Error if neither exists"
 
 rescue => e
-  puts "❌ Configuration error: #{e.message}"
+  puts "ERROR: Configuration error: #{e.message}"
   puts ""
-  puts "🔧 Setup instructions:"
+  puts "Setup instructions:"
   puts "   export KSM_CONFIG='your_base64_config_here'"
   puts "   OR"
   puts "   Create #{KSMConfigManager::CONFIG_FILE}"
@@ -640,7 +640,7 @@ end
 
 puts ""
 puts "=" * 60
-puts "✅ Configuration management complete"
+puts "Configuration management complete"
 ```{{copy}}
 
 ## 5. Production Deployment Checklist
@@ -663,7 +663,7 @@ class ProductionReadinessChecker
       { name: 'Monitoring', method: :check_monitoring }
     ]
 
-    puts "🔍 Production Readiness Checklist"
+    puts "Production Readiness Checklist"
     puts "=" * 60
     puts ""
 
@@ -672,7 +672,7 @@ class ProductionReadinessChecker
 
       result = send(check[:method])
 
-      status = result[:passed] ? "✅ PASS" : "❌ FAIL"
+      status = result[:passed] ? "PASS" : "FAIL"
       puts status
 
       if result[:notes]
@@ -692,9 +692,9 @@ class ProductionReadinessChecker
     puts "Results: #{passed}/#{total} checks passed"
 
     if passed == total
-      puts "✅ Production ready!"
+      puts "Production ready!"
     else
-      puts "⚠️  Address failing checks before production deployment"
+      puts "WARNING: Address failing checks before production deployment"
     end
 
     results

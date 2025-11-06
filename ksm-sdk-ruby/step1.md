@@ -62,11 +62,11 @@ Let's create a simple Ruby script to connect and list secrets. Create a file cal
 
 require 'keeper_secrets_manager'
 
-puts "🔐 Keeper Secrets Manager - Ruby SDK Demo"
+puts "Keeper Secrets Manager - Ruby SDK Demo"
 puts "=" * 50
 puts ""
 
-# ⚠️ SECURITY WARNING ⚠️
+# SECURITY WARNING
 # Replace [YOUR_BASE64_CONFIG_HERE] with your actual test configuration
 # NEVER use production credentials in tutorials!
 # NEVER commit this config to version control!
@@ -75,20 +75,20 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 
 begin
   # Step 1: Initialize storage with base64 configuration
-  puts "📡 Connecting to Keeper Secrets Manager..."
+  puts "Connecting to Keeper Secrets Manager..."
   storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 
   # Step 2: Create the SecretsManager client
   secrets_manager = KeeperSecretsManager.new(config: storage)
 
-  puts "✅ Successfully connected!"
+  puts "Successfully connected!"
   puts ""
 
   # Step 3: Retrieve all secrets
-  puts "📋 Fetching secrets..."
+  puts "Fetching secrets..."
   secrets = secrets_manager.get_secrets
 
-  puts "✅ Found #{secrets.length} secret(s)"
+  puts "Found #{secrets.length} secret(s)"
   puts ""
 
   # Step 4: Display basic information
@@ -103,11 +103,11 @@ begin
       puts ""
     end
   else
-    puts "⚠️  No secrets found. Create some secrets in Keeper first."
+    puts "WARNING: No secrets found. Create some secrets in Keeper first."
   end
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ KSM Error: #{e.message}"
+  puts "ERROR: KSM Error: #{e.message}"
   puts ""
   puts "Troubleshooting:"
   puts "- Verify your base64 config is correct"
@@ -116,12 +116,12 @@ rescue KeeperSecretsManager::Error => e
   exit 1
 
 rescue StandardError => e
-  puts "❌ Unexpected Error: #{e.class} - #{e.message}"
+  puts "ERROR: Unexpected Error: #{e.class} - #{e.message}"
   exit 1
 end
 
 puts "=" * 50
-puts "✅ Connection successful! Ready for Step 2."
+puts "Connection successful! Ready for Step 2."
 ```{{copy}}
 
 ## 4. Set Your Configuration

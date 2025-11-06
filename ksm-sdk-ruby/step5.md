@@ -38,7 +38,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "📎 Listing Files in Secrets"
+puts "Listing Files in Secrets"
 puts "=" * 60
 puts ""
 
@@ -58,7 +58,7 @@ begin
       puts "  Files:"
 
       secret.files.each do |file|
-        puts "    📄 #{file['name'] || file['title']}"
+        puts "    [File] #{file['name'] || file['title']}"
         puts "       File UID: #{file['fileUid']}"
         puts "       Size: #{format_bytes(file['size'] || 0)}"
         puts "       Type: #{file['type'] || 'unknown'}"
@@ -67,12 +67,12 @@ begin
       puts ""
     end
   else
-    puts "⚠️  No secrets with attached files found"
+    puts "WARNING: No secrets with attached files found"
     puts "Upload some files first!"
   end
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 def format_bytes(bytes)
@@ -86,7 +86,7 @@ def format_bytes(bytes)
 end
 
 puts "=" * 60
-puts "✅ File listing complete"
+puts "File listing complete"
 ```{{copy}}
 
 Save as `list_files.rb` and run:
@@ -141,7 +141,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "📤 Uploading File to Secret"
+puts "Uploading File to Secret"
 puts "=" * 60
 puts ""
 
@@ -150,7 +150,7 @@ begin
   secrets = secrets_manager.get_secrets
 
   if secrets.empty?
-    puts "❌ No secrets found. Create a secret first."
+    puts "ERROR: No secrets found. Create a secret first."
     exit 1
   end
 
@@ -197,7 +197,7 @@ begin
     "Demo Configuration"  # File title
   )
 
-  puts "✅ File uploaded successfully!"
+  puts "File uploaded successfully!"
   puts "   File UID: #{file_uid}"
   puts ""
 
@@ -209,7 +209,7 @@ begin
     new_file = updated_secret.files.find { |f| f['fileUid'] == file_uid }
 
     if new_file
-      puts "🔍 Verification:"
+      puts "Verification:"
       puts "   File Name: #{new_file['name']}"
       puts "   File Title: #{new_file['title']}"
       puts "   File Size: #{new_file['size']} bytes"
@@ -218,7 +218,7 @@ begin
   end
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
   puts ""
   puts "Common issues:"
   puts "- Ensure secret UID is valid"
@@ -228,7 +228,7 @@ end
 
 puts ""
 puts "=" * 60
-puts "✅ File upload complete"
+puts "File upload complete"
 ```{{copy}}
 
 Save as `upload_file.rb` and run:
@@ -252,7 +252,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "📥 Downloading Files from Secret"
+puts "Downloading Files from Secret"
 puts "=" * 60
 puts ""
 
@@ -264,7 +264,7 @@ begin
   secrets_with_files = secrets.select { |s| s.files && s.files.any? }
 
   if secrets_with_files.empty?
-    puts "⚠️  No files found to download"
+    puts "WARNING: No files found to download"
     puts "Upload some files first with upload_file.rb"
     exit 0
   end
@@ -294,7 +294,7 @@ begin
       f.write(downloaded['data'])
     end
 
-    puts "   ✅ Saved to: #{file_path}"
+    puts "   Saved to: #{file_path}"
     puts "   Size: #{downloaded['data'].bytesize} bytes"
     puts "   Type: #{downloaded['type']}"
     puts ""
@@ -304,22 +304,22 @@ begin
       content = downloaded['data'].force_encoding('UTF-8')
       lines = content.lines.first(5)
 
-      puts "   📄 Preview:"
+      puts "   Preview:"
       lines.each { |line| puts "      #{line.chomp}" }
       puts "      ..." if content.lines.count > 5
       puts ""
     end
   end
 
-  puts "✅ All files downloaded to: #{download_dir}"
+  puts "All files downloaded to: #{download_dir}"
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""
 puts "=" * 60
-puts "✅ File download complete"
+puts "File download complete"
 ```{{copy}}
 
 Save as `download_files.rb` and run:
@@ -371,7 +371,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "📁 Managing Multiple Files"
+puts "Managing Multiple Files"
 puts "=" * 60
 puts ""
 
@@ -380,7 +380,7 @@ begin
   secrets = secrets_manager.get_secrets
 
   if secrets.empty?
-    puts "❌ No secrets found"
+    puts "ERROR: No secrets found"
     exit 1
   end
 
@@ -425,32 +425,32 @@ begin
     )
 
     uploaded_uids << file_uid
-    puts "   ✅ Uploaded (#{file_uid})"
+    puts "   Uploaded (#{file_uid})"
 
     sleep 0.5  # Rate limiting
   end
 
   puts ""
-  puts "✅ All files uploaded!"
+  puts "All files uploaded!"
   puts ""
 
   # Verify
   sleep 2
   updated_secret = secrets_manager.get_secrets([owner_secret.uid]).first
 
-  puts "🔍 Verification:"
+  puts "Verification:"
   puts "Total files: #{updated_secret.files&.length || 0}"
   puts ""
 
   if updated_secret.files && updated_secret.files.any?
     updated_secret.files.each do |file|
-      status = uploaded_uids.include?(file['fileUid']) ? "🆕" : "📄"
+      status = uploaded_uids.include?(file['fileUid']) ? "[NEW]" : "[File]"
       puts "#{status} #{file['name']} (#{file['size']} bytes)"
     end
   end
 
 rescue StandardError => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""
@@ -473,7 +473,7 @@ FOLDER_UID = ENV['FOLDER_UID'] || "[YOUR_FOLDER_UID]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🔐 SSL Certificate Management Workflow"
+puts "SSL Certificate Management Workflow"
 puts "=" * 60
 puts ""
 
@@ -494,7 +494,7 @@ begin
   options.folder_uid = FOLDER_UID
 
   record_uid = secrets_manager.create_secret(cert_record, options)
-  puts "   ✅ Secret created: #{record_uid}"
+  puts "   Secret created: #{record_uid}"
   puts ""
 
   sleep 1
@@ -515,7 +515,7 @@ begin
     'SSL Certificate'
   )
 
-  puts "   ✅ Certificate uploaded: #{cert_uid}"
+  puts "   Certificate uploaded: #{cert_uid}"
 
   sleep 1
 
@@ -535,7 +535,7 @@ begin
     'Private Key'
   )
 
-  puts "   ✅ Private key uploaded: #{key_uid}"
+  puts "   Private key uploaded: #{key_uid}"
   puts ""
 
   # Step 4: Verify everything
@@ -552,18 +552,18 @@ begin
   end
 
   puts ""
-  puts "✅ SSL certificate workflow complete!"
+  puts "SSL certificate workflow complete!"
   puts ""
-  puts "📋 Next Steps:"
+  puts "Next Steps:"
   puts "   - Download files when needed for deployment"
   puts "   - Rotate certificate before expiry"
   puts "   - Share secret with deployment team"
 
 rescue ArgumentError => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
   puts "Make sure to set FOLDER_UID environment variable!"
 rescue StandardError => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts ""

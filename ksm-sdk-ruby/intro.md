@@ -74,6 +74,6 @@ This environment comes pre-configured with:
 
 ## 🚀 Ready to Start?
 
-Click **"Continue"** to begin with Step 1: Installation & First Connection.
+Click **"Start"** to begin with Step 1: Installation & First Connection.
 
-You'll write your first working KSM Ruby script in the next 2 minutes! 🎉
+You'll write your first working KSM Ruby script in the next 2 minutes!

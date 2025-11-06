@@ -38,7 +38,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🔍 Reading Secret Fields"
+puts "Reading Secret Fields"
 puts "=" * 60
 puts ""
 
@@ -47,7 +47,7 @@ begin
   secrets = secrets_manager.get_secrets
 
   if secrets.empty?
-    puts "⚠️  No secrets found. Add secrets to your Keeper vault first."
+    puts "WARNING: No secrets found. Add secrets to your Keeper vault first."
     exit 0
   end
 
@@ -59,14 +59,14 @@ begin
   puts ""
 
   # Access common fields using convenience methods
-  puts "📋 Common Fields:"
+  puts "Common Fields:"
   puts "  Login:    #{secret.login || '(not set)'}"
   puts "  Password: #{'*' * 12} (hidden)"
   puts "  URL:      #{secret.url&.first || '(not set)'}"
   puts ""
 
   # Access fields directly
-  puts "📦 All Fields:"
+  puts "All Fields:"
   secret.fields.each do |field|
     field_type = field['type']
     field_value = field['value']
@@ -84,7 +84,7 @@ begin
   # Access custom fields
   if secret.custom && secret.custom.any?
     puts ""
-    puts "🔧 Custom Fields:"
+    puts "Custom Fields:"
     secret.custom.each do |custom_field|
       label = custom_field['label']
       value = custom_field['value']
@@ -95,18 +95,18 @@ begin
   # Access notes
   if secret.notes && !secret.notes.empty?
     puts ""
-    puts "📝 Notes:"
+    puts "Notes:"
     puts "  #{secret.notes[0..100]}#{'...' if secret.notes.length > 100}"
   end
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ KSM Error: #{e.message}"
+  puts "ERROR: KSM Error: #{e.message}"
   exit 1
 end
 
 puts ""
 puts "=" * 60
-puts "✅ Field access demonstration complete"
+puts "Field access demonstration complete"
 ```{{copy}}
 
 Save this as `read_fields.rb` and run it:
@@ -159,7 +159,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🔎 Searching Secrets by Title"
+puts "Searching Secrets by Title"
 puts "=" * 60
 puts ""
 
@@ -168,19 +168,19 @@ secret_title = "Production Database"  # Change this to match your secret
 found_secret = secrets_manager.get_secret_by_title(secret_title)
 
 if found_secret
-  puts "✅ Found: #{found_secret.title}"
+  puts "Found: #{found_secret.title}"
   puts "   UID: #{found_secret.uid}"
   puts "   Login: #{found_secret.login}"
   puts ""
 else
-  puts "❌ No secret found with title: '#{secret_title}'"
+  puts "No secret found with title: '#{secret_title}'"
   puts ""
   puts "Available secrets:"
   secrets_manager.get_secrets.each { |s| puts "  - #{s.title}" }
 end
 
 # Search for multiple secrets matching a pattern
-puts "🔍 Searching for secrets containing 'Database':"
+puts "Searching for secrets containing 'Database':"
 puts "-" * 60
 
 all_secrets = secrets_manager.get_secrets
@@ -192,9 +192,9 @@ if matching.any?
     puts "   Login: #{secret.login || '(none)'}"
     puts ""
   end
-  puts "✅ Found #{matching.length} matching secret(s)"
+  puts "Found #{matching.length} matching secret(s)"
 else
-  puts "⚠️  No secrets found matching 'Database'"
+  puts "WARNING: No secrets found matching 'Database'"
 end
 ```{{copy}}
 
@@ -218,7 +218,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🎯 Field Type Examples"
+puts "Field Type Examples"
 puts "=" * 60
 puts ""
 
@@ -226,7 +226,7 @@ begin
   secret = secrets_manager.get_secrets.first
 
   # Text fields (login, password, url)
-  puts "📝 Text Fields:"
+  puts "Text Fields:"
   puts "  Login: #{secret.login}"
   puts "  URL: #{secret.url&.first}"
   puts ""
@@ -234,7 +234,7 @@ begin
   # Get field value using helper method
   phone = secret.get_field_value_single('phone')
   if phone
-    puts "📞 Phone Field:"
+    puts "Phone Field:"
     puts "  Number: #{phone['number']}"
     puts "  Region: #{phone['region']}"
     puts "  Type: #{phone['type']}"
@@ -244,7 +244,7 @@ begin
   # Name field
   name = secret.get_field_value_single('name')
   if name
-    puts "👤 Name Field:"
+    puts "Name Field:"
     puts "  First: #{name['first']}"
     puts "  Last: #{name['last']}"
     puts ""
@@ -253,7 +253,7 @@ begin
   # Address field
   address = secret.get_field_value_single('address')
   if address
-    puts "📍 Address Field:"
+    puts "Address Field:"
     puts "  Street: #{address['street1']}"
     puts "  City: #{address['city']}, #{address['state']} #{address['zip']}"
     puts "  Country: #{address['country']}"
@@ -263,7 +263,7 @@ begin
   # Payment card field
   card = secret.get_field_value_single('paymentCard')
   if card
-    puts "💳 Payment Card Field:"
+    puts "Payment Card Field:"
     puts "  Last 4: ****-#{card['cardNumber'][-4..-1]}"
     puts "  Expiry: #{card['cardExpirationDate']}"
     puts ""
@@ -271,7 +271,7 @@ begin
 
   # File references
   if secret.files && secret.files.any?
-    puts "📎 Attached Files:"
+    puts "Attached Files:"
     secret.files.each do |file|
       puts "  - #{file['name']} (#{file['size']} bytes)"
     end
@@ -279,11 +279,11 @@ begin
   end
 
 rescue KeeperSecretsManager::Error => e
-  puts "❌ Error: #{e.message}"
+  puts "ERROR: #{e.message}"
 end
 
 puts "=" * 60
-puts "✅ Field type examples complete"
+puts "Field type examples complete"
 ```{{copy}}
 
 Save as `field_types.rb` and run:
@@ -306,7 +306,7 @@ KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
 storage = KeeperSecretsManager::Storage::InMemoryStorage.new(KSM_CONFIG)
 secrets_manager = KeeperSecretsManager.new(config: storage)
 
-puts "🔗 Notation System Examples"
+puts "Notation System Examples"
 puts "=" * 60
 puts ""
 
@@ -319,7 +319,7 @@ puts "UID: #{uid}"
 puts ""
 
 # Access fields using notation
-puts "📝 Notation Examples:"
+puts "Notation Examples:"
 puts "-" * 60
 
 # Title notation
@@ -348,7 +348,7 @@ end
 
 puts ""
 puts "=" * 60
-puts "✅ Notation examples complete"
+puts "Notation examples complete"
 ```{{copy}}
 
 Save as `notation_demo.rb` and run:
