@@ -105,12 +105,12 @@ Now run the script:
 ruby list_folders.rb
 ```{{execute}}
 
-**✅ Expected Output:**
+**Expected Output:**
 ```
-📁 Listing Folders
+Listing Folders
 ============================================================
 
-✅ Found 5 folder(s)
+Found 5 folder(s)
 
 1. DevOps Secrets
    UID: lPxZXk...
@@ -127,14 +127,14 @@ ruby list_folders.rb
    Parent: lPxZXk...
    Records: 2
 
-📊 Folder Hierarchy:
+Folder Hierarchy:
 ------------------------------------------------------------
-📁 DevOps Secrets (lPxZXk...)
-  └─ 📁 Production (mQyAYl...)
-  └─ 📁 Staging (nRzBZm...)
+DevOps Secrets (lPxZXk...)
+  └─ Production (mQyAYl...)
+  └─ Staging (nRzBZm...)
 
 ============================================================
-✅ Folder listing complete
+Folder listing complete
 ```
 
 ## 2. Creating Folders
@@ -224,9 +224,10 @@ ruby create_folder.rb
 
 ## 3. Updating Folder Names
 
-Rename existing folders:
+Rename existing folders. Create the `update_folder.rb` file:
 
-```ruby
+```
+cat > update_folder.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -284,13 +285,21 @@ end
 puts ""
 puts "=" * 60
 puts "Folder update complete"
-```{{copy}}
+EOF
+```{{execute}}
+
+Now run the script:
+
+```bash
+ruby update_folder.rb
+```{{execute}}
 
 ## 4. Working with Folder Hierarchy
 
-Use the FolderManager for advanced operations:
+Use the FolderManager for advanced operations. Create the `folder_hierarchy.rb` file:
 
-```ruby
+```
+cat > folder_hierarchy.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -343,13 +352,21 @@ end
 puts ""
 puts "=" * 60
 puts "Hierarchy navigation complete"
-```{{copy}}
+EOF
+```{{execute}}
+
+Now run the script:
+
+```bash
+ruby folder_hierarchy.rb
+```{{execute}}
 
 ## 5. Creating Secrets in Specific Folders
 
-Combine folder and record creation:
+Combine folder and record creation. Create the `create_folder_with_secrets.rb` file:
 
-```ruby
+```
+cat > create_folder_with_secrets.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -418,13 +435,23 @@ end
 
 puts ""
 puts "=" * 60
-```{{copy}}
+EOF
+```{{execute}}
+
+Now run the script:
+
+```bash
+ruby create_folder_with_secrets.rb
+```{{execute}}
 
 ## 6. Deleting Folders
 
 **⚠️ CAUTION**: Deleting folders can delete contained records!
 
-```ruby
+Create the `delete_folders.rb` file:
+
+```
+cat > delete_folders.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -476,11 +503,18 @@ end
 puts ""
 puts "=" * 60
 puts "Folder deletion complete"
-```{{copy}}
+EOF
+```{{execute}}
+
+Now run the script:
+
+```bash
+ruby delete_folders.rb
+```{{execute}}
 
 **⚠️ Security Warning**: Always verify folders before deletion in production!
 
-## 🔍 Understanding Folder Structure
+## Understanding Folder Structure
 
 ### Shared Folder Roots
 - **Root folders** have no `parent_uid` (or empty string)
@@ -499,7 +533,7 @@ puts "Folder deletion complete"
 
 ## 🔒 Security Best Practices
 
-✅ **DO:**
+**DO:**
 - Organize secrets by environment (dev/staging/prod folders)
 - Use descriptive folder names
 - Create folder structure before bulk secret creation
