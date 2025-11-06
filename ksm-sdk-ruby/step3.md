@@ -35,11 +35,15 @@ storage = KeeperSecretsManager::Storage::InMemoryStorage.new(ENV['KSM_CONFIG'])
 sm = KeeperSecretsManager.new(config: storage)
 folders = sm.get_folders
 puts 'Available Folders:'
-folders.each { |f| puts \"  #{f.name}: #{f.uid}\" }
+folders.each do |f|
+  is_root = f.parent_uid.nil? || f.parent_uid.empty?
+  marker = is_root ? '[SHARED ROOT]' : '[Subfolder]'
+  puts \"  #{marker} #{f.name}: #{f.uid}\"
+end
 "
 ```{{execute}}
 
-Save a folder UID - you'll need it for creating records!
+Save a **shared folder root** UID (marked [SHARED ROOT]) - you'll need it for creating records!
 
 ## 1. Creating a Simple Login Record
 
