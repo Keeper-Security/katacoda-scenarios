@@ -418,7 +418,8 @@ begin
     }
 
     options = KeeperSecretsManager::Dto::CreateOptions.new
-    options.folder_uid = folder_uid
+    options.folder_uid = parent_folder.uid    # Shared folder root
+    options.subfolder_uid = folder_uid        # Newly created subfolder
 
     record_uid = secrets_manager.create_secret(record_data, options)
     puts "   Created: App Secret #{i + 1} (#{record_uid})"
