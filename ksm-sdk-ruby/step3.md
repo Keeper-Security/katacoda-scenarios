@@ -98,7 +98,7 @@ begin
     puts "   Title: #{created_secret.title}"
     puts "   Login: #{created_secret.login}"
     puts "   Password: #{'*' * 12} (hidden)"
-    puts "   URL: #{created_secret.url&.first}"
+    puts "   URL: #{created_secret.url}"
   else
     puts "WARNING: Could not verify - secret may take a moment to sync"
   end
@@ -129,23 +129,23 @@ export FOLDER_UID="your-folder-uid-here"
 ruby create_simple.rb
 ```{{execute}}
 
-**✅ Expected Output:**
+**Expected Output:**
 ```
-🆕 Creating a New Secret
+Creating a New Secret
 ============================================================
 
 Creating record in folder: lPxZXk...
-✅ Secret created successfully!
+Secret created successfully!
    UID: mQyAYl...
 
-🔍 Verification:
+Verification:
    Title: Ruby SDK Demo - Database
    Login: demo_user
    Password: ************ (hidden)
    URL: https://demo-db.example.com:5432
 
 ============================================================
-✅ Record creation example complete
+Record creation example complete
 ```
 
 ## 2. Creating Complex Records with Multiple Field Types
@@ -323,7 +323,7 @@ begin
   puts "Current Values:"
   puts "   Login: #{secret.login || '(not set)'}"
   puts "   Password: #{'*' * 12}"
-  puts "   URL: #{secret.url&.first || '(not set)'}"
+  puts "   URL: #{secret.url || '(not set)'}"
   puts ""
 
   # Update fields
@@ -362,7 +362,7 @@ begin
   puts "New Values:"
   puts "   Login: #{updated_secret.login}"
   puts "   Password: #{'*' * 12} (changed)"
-  puts "   URL: #{updated_secret.url&.first}"
+  puts "   URL: #{updated_secret.url}"
   puts "   Last Updated: #{updated_secret.custom&.find { |f| f['label'] == 'Last Updated' }&.dig('value', 0)}"
 
 rescue KeeperSecretsManager::RecordNotFoundError => e
@@ -387,30 +387,30 @@ Now run the script:
 ruby update_record.rb
 ```{{execute}}
 
-**✅ Expected Output:**
+**Expected Output:**
 ```
-✏️  Updating Secret Fields
+Updating Secret Fields
 ============================================================
 
 Updating: Production Database
 UID: lPxZXk...
 
-📋 Current Values:
+Current Values:
    Login: db_admin
    Password: ************
    URL: https://db.example.com
 
-🔄 Applying updates...
-✅ Update successful!
+Applying updates...
+Update successful!
 
-📋 New Values:
+New Values:
    Login: updated_db_admin
    Password: ************ (changed)
    URL: https://updated.example.com
    Last Updated: 2024-11-06 12:45:30
 
 ============================================================
-✅ Record update example complete
+Record update example complete
 ```
 
 ## 4. Bulk Update Pattern
@@ -495,7 +495,7 @@ puts "=" * 60
 
 ## 🔒 Security Best Practices
 
-✅ **DO:**
+**DO:**
 - Validate input before creating/updating secrets
 - Use strong password generation (20+ characters)
 - Add metadata (owner, environment, created date)
