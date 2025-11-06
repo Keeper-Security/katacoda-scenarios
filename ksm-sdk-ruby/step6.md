@@ -776,7 +776,7 @@ ruby production_readiness.rb
 - ✅ Store config in environment variables or secure config management
 - ✅ Never commit credentials to git (add to `.gitignore`)
 - ✅ Use separate KSM apps for dev/staging/prod
-- ✅ Rotate one-time tokens after binding
+- ✅ Rotate KSM configurations regularly (generate new token, re-bind, update config)
 - ✅ Set file permissions to 0600 for config files
 
 ### Network Security

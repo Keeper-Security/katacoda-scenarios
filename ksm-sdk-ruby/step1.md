@@ -356,7 +356,7 @@ sm = KeeperSecretsManager.from_token(one_time_token)
 ✅ **DO:**
 - Use environment variables for configuration (`ENV['KSM_CONFIG']`)
 - Create separate KSM applications for dev/staging/prod
-- Rotate one-time tokens regularly
+- Rotate KSM configurations regularly (regenerate new token and re-bind)
 - Use file-based storage with proper permissions (0600)
 
 ❌ **DON'T:**
