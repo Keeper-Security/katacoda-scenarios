@@ -1,0 +1,42 @@
+{
+  "title": "Keeper Secrets Manager - Ruby SDK Complete Guide",
+  "description": "Master the KSM Ruby SDK with hands-on examples covering connection, CRUD operations, folders, files, and production-ready patterns",
+  "details": {
+    "intro": {
+      "text": "intro.md",
+      "background": "setup.sh"
+    },
+    "steps": [
+      {
+        "title": "Installation & First Connection",
+        "text": "step1.md"
+      },
+      {
+        "title": "Reading Secrets & Fields",
+        "text": "step2.md"
+      },
+      {
+        "title": "Creating & Updating Records",
+        "text": "step3.md"
+      },
+      {
+        "title": "Folder Management",
+        "text": "step4.md"
+      },
+      {
+        "title": "File Operations",
+        "text": "step5.md"
+      },
+      {
+        "title": "Production Patterns & Best Practices",
+        "text": "step6.md"
+      }
+    ],
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "backend": {
+    "imageid": "ubuntu:2204"
+  }
+}

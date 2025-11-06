@@ -4,6 +4,7 @@ This document provides comprehensive guidelines for creating high-quality Keeper
 
 ## Table of Contents
 
+- [Available KSM Tutorials](#available-ksm-tutorials)
 - [Killercoda Syntax Reference](#killercoda-syntax-reference)
 - [Security & Safety Guidelines](#security--safety-guidelines)
 - [Tutorial Structure & Organization](#tutorial-structure--organization)
@@ -12,6 +13,50 @@ This document provides comprehensive guidelines for creating high-quality Keeper
 - [Technical Implementation Guidelines](#technical-implementation-guidelines)
 - [Testing & Validation Requirements](#testing--validation-requirements)
 - [Documentation Standards](#documentation-standards)
+
+## Available KSM Tutorials
+
+This repository contains comprehensive, production-ready tutorials for Keeper Secrets Manager SDKs:
+
+### **Ruby SDK** (`ksm-ruby-sdk/`)
+**Status**: ✅ Complete (3,799 lines)
+**Version**: SDK 17.1.0 | Ruby 3.2+
+**Content**: 6 steps covering installation, CRUD operations, folders, files, and production patterns
+
+**Tutorial Structure:**
+- **Step 1**: Installation & First Connection (300 lines)
+- **Step 2**: Reading Secrets & Fields (433 lines)
+- **Step 3**: Creating & Updating Records (538 lines)
+- **Step 4**: Folder Management (543 lines)
+- **Step 5**: File Operations (637 lines)
+- **Step 6**: Production Patterns & Best Practices (861 lines)
+
+**Key Features:**
+- 30+ complete, tested code examples
+- Real-world integration patterns (Rails, Sidekiq, Rake, Docker)
+- Production-ready error handling, caching, and logging
+- Comprehensive security warnings throughout
+- All code validated against actual SDK
+
+**Technical Notes:**
+- Uses Brightbox PPA for Ruby 3.2 on Ubuntu 22.04
+- Gem: `keeper_secrets_manager` version 17.1.0
+- Main classes: `KeeperSecretsManager`, `Storage::InMemoryStorage`, `Storage::FileStorage`
+- Key methods: `get_secrets`, `create_secret`, `update_secret`, `create_folder`, `upload_file`, `download_file`
+
+### **Python SDK** (`ksm-python-sdk/`)
+**Status**: ✅ Complete
+Comprehensive Python SDK tutorial with notebook patterns and async support.
+
+### **CLI** (`ksm-cli/`)
+**Status**: ✅ Complete
+Command-line interface tutorial for quick secret retrieval and automation.
+
+### **Java SDK** (`ksm-java-sdk/`)
+**Status**: ✅ Complete
+Enterprise Java patterns with Gradle/Maven integration.
+
+---
 
 ## Killercoda Syntax Reference
 
