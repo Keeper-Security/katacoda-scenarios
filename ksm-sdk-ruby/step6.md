@@ -29,7 +29,7 @@ In this step, you'll learn how to:
 
 Implement comprehensive error handling. Create the `production_errors.rb` file:
 
-```
+```bash
 cat > production_errors.rb << 'EOF'
 #!/usr/bin/env ruby
 
@@ -181,7 +181,7 @@ ruby production_errors.rb
 
 Configure comprehensive logging. Create the `logging_example.rb` file:
 
-```
+```bash
 cat > logging_example.rb << 'EOF'
 #!/usr/bin/env ruby
 
@@ -387,7 +387,7 @@ ruby logging_example.rb
 
 Secure configuration handling. Create the `config_management.rb` file:
 
-```
+```bash
 cat > config_management.rb << 'EOF'
 #!/usr/bin/env ruby
 
@@ -492,7 +492,7 @@ ruby config_management.rb
 
 Create a comprehensive production deployment example. Create the `production_checklist.rb` file:
 
-```
+```bash
 cat > production_checklist.rb << 'EOF'
 #!/usr/bin/env ruby
 
