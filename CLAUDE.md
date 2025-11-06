@@ -18,7 +18,7 @@ This document provides comprehensive guidelines for creating high-quality Keeper
 
 This repository contains comprehensive, production-ready tutorials for Keeper Secrets Manager SDKs:
 
-### **Ruby SDK** (`ksm-ruby-sdk/`)
+### **Ruby SDK** (`ksm-sdk-ruby/`)
 **Status**: ✅ Complete (3,799 lines)
 **Version**: SDK 17.1.0 | Ruby 3.2+
 **Content**: 6 steps covering installation, CRUD operations, folders, files, and production patterns
