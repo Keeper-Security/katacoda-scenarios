@@ -22,9 +22,25 @@ In this step, you'll:
 - **Simple Ruby API** - works with any Ruby 3.1+ application
 - **No external dependencies** -just OpenSSL (built into Ruby)
 
-## 1. Verify Installation
+## 1. Install the KSM Ruby SDK Gem
 
-The KSM gem is already installed in this environment. Let's verify it:
+First, verify Ruby is installed:
+
+```bash
+ruby --version
+```{{execute}}
+
+**Expected**: Ruby 3.2.3 or higher
+
+Now install the Keeper Secrets Manager gem:
+
+```bash
+gem install keeper_secrets_manager
+```{{execute}}
+
+This will install the latest stable version (17.1.0).
+
+Verify the installation:
 
 ```bash
 gem list keeper_secrets_manager
@@ -34,12 +50,6 @@ gem list keeper_secrets_manager
 ```
 keeper_secrets_manager (17.1.0)
 ```
-
-You can also check the Ruby version:
-
-```bash
-ruby --version
-```{{execute}}
 
 ## 2. Understanding KSM Configuration
 
