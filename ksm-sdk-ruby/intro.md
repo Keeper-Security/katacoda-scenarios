@@ -53,7 +53,7 @@ Master CRUD operations with various field types and update strategies.
 ### **Step 4: Folder Management** 📁
 Organize your secrets with folders and understand folder hierarchies.
 
-###**Step 5: File Operations** 📎
+### **Step 5: File Operations** 📎
 Upload and download files attached to secrets securely.
 
 ### **Step 6: Production Patterns** 🚀
