@@ -1,12 +1,11 @@
 # Step 6: Production Patterns & Best Practices
 
-**Learning Objective**: Master production-ready patterns, error handling, caching, logging, and security hardening for real-world deployments.
+**Learning Objective**: Master production-ready patterns, error handling, logging, and security hardening for real-world deployments.
 
 ## What You'll Accomplish
 
 In this step, you'll learn how to:
 - Implement robust error handling
-- Use caching for offline resilience
 - Configure logging for debugging and auditing
 - Handle network failures and retries
 - Secure configuration management
@@ -18,13 +17,13 @@ In this step, you'll learn how to:
 - **High availability** - applications work even during network issues
 - **Audit compliance** - complete logging of secret access
 - **Reduced downtime** - graceful degradation during failures
-- **Cost efficiency** - reduced API calls with caching
+- **Security assurance** - production-ready hardening and monitoring
 
 **Technical Benefits:**
 - **Resilience** - handle transient failures automatically
 - **Observability** - debug issues with proper logging
 - **Security** - defense-in-depth with multiple layers
-- **Performance** - optimized secret retrieval with caching
+- **Reliability** - robust error handling and retry logic
 
 ## 1. Robust Error Handling
 
@@ -119,7 +118,7 @@ class KSMClientWrapper
       when 'password'
         secret.password
       when 'url'
-        secret.url&.first
+        secret.url
       else
         secret.get_field_value_single(field_name)
       end
@@ -178,177 +177,12 @@ Now run the script:
 ruby production_errors.rb
 ```{{execute}}
 
-## 2. Caching for Offline Resilience
+## 2. Logging and Debugging
 
-Implement caching to handle network outages:
+Configure comprehensive logging. Create the `logging_example.rb` file:
 
-```ruby
-#!/usr/bin/env ruby
-
-require 'keeper_secrets_manager'
-require 'json'
-require 'fileutils'
-
-# Production caching wrapper
-class CachedKSMClient
-  CACHE_DIR = '/tmp/ksm_cache'
-  CACHE_TTL = 3600  # 1 hour
-
-  attr_reader :secrets_manager
-
-  def initialize(config)
-    FileUtils.mkdir_p(CACHE_DIR)
-
-    storage = KeeperSecretsManager::Storage::InMemoryStorage.new(config)
-    @secrets_manager = KeeperSecretsManager.new(config: storage)
-  end
-
-  def get_secrets_with_cache(force_refresh: false)
-    cache_file = File.join(CACHE_DIR, 'secrets_cache.json')
-
-    # Try cache first unless force refresh
-    unless force_refresh
-      if File.exist?(cache_file)
-        cache_age = Time.now - File.mtime(cache_file)
-
-        if cache_age < CACHE_TTL
-          puts "Using cached secrets (age: #{cache_age.to_i}s)"
-
-          cache_data = JSON.parse(File.read(cache_file))
-          return cache_data['secrets'].map { |s| reconstruct_secret(s) }
-        else
-          puts "Cache expired (age: #{cache_age.to_i}s > #{CACHE_TTL}s)"
-        end
-      end
-    end
-
-    # Fetch from KSM
-    begin
-      puts "Fetching from Keeper Secrets Manager..."
-
-      secrets = @secrets_manager.get_secrets
-
-      # Cache the results
-      cache_data = {
-        'timestamp' => Time.now.to_i,
-        'secrets' => secrets.map { |s| serialize_secret(s) }
-      }
-
-      File.open(cache_file, 'w') do |f|
-        f.write(JSON.pretty_generate(cache_data))
-      end
-
-      File.chmod(0600, cache_file)  # Secure permissions
-
-      puts "Fetched #{secrets.length} secrets and cached"
-
-      secrets
-
-    rescue => e
-      # Fallback to cache on error
-      if File.exist?(cache_file)
-        puts "WARNING: Network error, using stale cache: #{e.message}"
-
-        cache_data = JSON.parse(File.read(cache_file))
-        cache_age = Time.now.to_i - cache_data['timestamp']
-
-        puts "Using cached data (#{cache_age}s old)"
-
-        return cache_data['secrets'].map { |s| reconstruct_secret(s) }
-      else
-        puts "ERROR: No cache available and network failed"
-        raise
-      end
-    end
-  end
-
-  def clear_cache
-    cache_file = File.join(CACHE_DIR, 'secrets_cache.json')
-    File.delete(cache_file) if File.exist?(cache_file)
-    puts "Cache cleared"
-  end
-
-  private
-
-  def serialize_secret(secret)
-    {
-      'uid' => secret.uid,
-      'title' => secret.title,
-      'type' => secret.type,
-      'login' => secret.login,
-      'url' => secret.url,
-      'fields' => secret.fields,
-      'custom' => secret.custom,
-      'notes' => secret.notes
-    }
-  end
-
-  def reconstruct_secret(data)
-    # Create a simple object with cached data
-    secret = Object.new
-
-    data.each do |key, value|
-      secret.define_singleton_method(key) { value }
-    end
-
-    secret
-  end
-end
-
-# Usage example
-puts "Caching for Offline Resilience"
-puts "=" * 60
-puts ""
-
-KSM_CONFIG = ENV['KSM_CONFIG'] || "[YOUR_BASE64_CONFIG_HERE]"
-
-begin
-  client = CachedKSMClient.new(KSM_CONFIG)
-
-  # First fetch (from network)
-  puts "First fetch:"
-  secrets = client.get_secrets_with_cache
-  puts "Found #{secrets.length} secrets"
-  puts ""
-
-  # Second fetch (from cache)
-  puts "Second fetch (should use cache):"
-  secrets = client.get_secrets_with_cache
-  puts "Found #{secrets.length} secrets"
-  puts ""
-
-  # Force refresh
-  puts "Force refresh:"
-  secrets = client.get_secrets_with_cache(force_refresh: true)
-  puts "Found #{secrets.length} secrets"
-  puts ""
-
-  # Show secret titles
-  puts "Secrets:"
-  secrets.each_with_index do |secret, i|
-    puts "  #{i + 1}. #{secret.title}"
-  end
-
-rescue => e
-  puts "ERROR: #{e.message}"
-end
-
-puts ""
-puts "=" * 60
-puts "Caching example complete"
-```{{copy}}
-
-Save as `caching_example.rb` and run:
-
-```bash
-ruby caching_example.rb
-```{{execute}}
-
-## 3. Logging and Debugging
-
-Configure comprehensive logging:
-
-```ruby
+```
+cat > logging_example.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -540,19 +374,21 @@ end
 puts ""
 puts "=" * 60
 puts "Logging example complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `logging_example.rb` and run:
+Now run the script:
 
 ```bash
 ruby logging_example.rb
 ```{{execute}}
 
-## 4. Configuration Management
+## 3. Configuration Management
 
-Secure configuration handling:
+Secure configuration handling. Create the `config_management.rb` file:
 
-```ruby
+```
+cat > config_management.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -643,11 +479,21 @@ end
 puts ""
 puts "=" * 60
 puts "Configuration management complete"
-```{{copy}}
+EOF
+```{{execute}}
 
-## 5. Production Deployment Checklist
+Now run the script:
 
-```ruby
+```bash
+ruby config_management.rb
+```{{execute}}
+
+## 4. Production Deployment Checklist
+
+Create a comprehensive production deployment example. Create the `production_checklist.rb` file:
+
+```
+cat > production_checklist.rb << 'EOF'
 #!/usr/bin/env ruby
 
 require 'keeper_secrets_manager'
@@ -660,7 +506,6 @@ class ProductionReadinessChecker
       { name: 'SSL Verification', method: :check_ssl_verification },
       { name: 'Error Handling', method: :check_error_handling },
       { name: 'Logging Setup', method: :check_logging },
-      { name: 'Caching Strategy', method: :check_caching },
       { name: 'Credential Rotation', method: :check_rotation },
       { name: 'Monitoring', method: :check_monitoring }
     ]
@@ -734,17 +579,6 @@ class ProductionReadinessChecker
     }
   end
 
-  def self.check_caching
-    cache_dir = '/tmp/ksm_cache'
-
-    passed = File.directory?(cache_dir) && File.writable?(cache_dir) rescue false
-
-    {
-      passed: passed,
-      notes: passed ? nil : "Set up caching directory #{cache_dir}"
-    }
-  end
-
   def self.check_rotation
     {
       passed: true,
@@ -755,19 +589,20 @@ class ProductionReadinessChecker
   def self.check_monitoring
     {
       passed: false,
-      notes: "Set up monitoring for: API latency, error rates, cache hit ratio"
+      notes: "Set up monitoring for: API latency, error rates, secret access patterns"
     }
   end
 end
 
 # Run the checker
 ProductionReadinessChecker.check_all
-```{{copy}}
+EOF
+```{{execute}}
 
-Save as `production_readiness.rb` and run:
+Now run the script:
 
 ```bash
-ruby production_readiness.rb
+ruby production_checklist.rb
 ```{{execute}}
 
 ## 🔒 Production Security Checklist
@@ -797,35 +632,21 @@ ruby production_readiness.rb
 - ✅ Log all secret access with audit trail
 - ✅ Monitor API latency and error rates
 - ✅ Set up alerts for anomalous access patterns
-- ✅ Track cache hit ratio
 - ✅ Log rotation to prevent disk fill
-
-### Caching
-- ✅ Implement offline fallback with caching
-- ✅ Set appropriate cache TTL (1-24 hours)
-- ✅ Secure cache files (0600 permissions)
-- ✅ Clear cache on configuration changes
-- ✅ Monitor cache freshness
 
 ## Troubleshooting Production Issues
 
 ### High Latency
 - Check network connectivity to Keeper servers
 - Verify DNS resolution
-- Enable caching to reduce API calls
 - Use connection pooling
+- Optimize secret retrieval patterns
 
 ### Authentication Failures
 - Verify KSM configuration is valid
 - Check if one-time token has expired
 - Ensure KSM application still has access to secrets
 - Re-bind with new token if needed
-
-### Cache Issues
-- Verify cache directory permissions
-- Check disk space availability
-- Monitor cache file sizes
-- Implement cache cleanup for old entries
 
 ### Memory Leaks
 - Ensure secrets are dereferenced after use
