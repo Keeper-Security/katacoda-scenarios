@@ -2,6 +2,14 @@
 
 This document provides comprehensive guidelines for creating high-quality Keeper Secrets Manager (KSM) tutorials using Claude AI assistance.
 
+## Git Commit Guidelines
+
+**IMPORTANT**: When making commits to this repository:
+- ❌ **DO NOT** include Claude as a co-author
+- ❌ **DO NOT** add `Co-Authored-By: Claude <noreply@anthropic.com>` to commit messages
+- ❌ **DO NOT** include "Generated with Claude Code" attribution
+- ✅ **DO** create clean, professional commit messages without AI attribution
+
 ## Table of Contents
 
 - [Available KSM Tutorials](#available-ksm-tutorials)
