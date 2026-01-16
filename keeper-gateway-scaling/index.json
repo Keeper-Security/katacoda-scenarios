@@ -1,0 +1,51 @@
+{
+  "title": "Keeper Gateway: Scaling and High Availability",
+  "description": "Learn how to deploy and configure multiple Keeper Gateway instances for horizontal scaling and high availability using Kubernetes",
+  "difficulty": "Intermediate",
+  "time": "20-25 minutes",
+  "details": {
+    "steps": [
+      {
+        "title": "Step 1: Create Gateway in Keeper Vault",
+        "text": "step1.md"
+      },
+      {
+        "title": "Step 2: Configure Gateway Scaling with Commander",
+        "text": "step2.md"
+      },
+      {
+        "title": "Step 3: Deploy Scaled Gateway to Kubernetes",
+        "text": "step3.md"
+      },
+      {
+        "title": "Step 4: Configure PAM Records & Test Connections",
+        "text": "step4.md"
+      },
+      {
+        "title": "Step 5: Verify Load Balancing & High Availability",
+        "text": "step5.md"
+      }
+    ],
+    "intro": {
+      "text": "intro.md",
+      "code": "install-commander.sh",
+      "credits": "Keeper Security"
+    },
+    "finish": {
+      "text": "finish.md"
+    }
+  },
+  "environment": {
+    "hideintro": false,
+    "hidefinish": false,
+    "uilayout": "editor-terminal",
+    "uieditorpath": "/root/workdir",
+    "uimessage1": "Your Interactive Bash Terminal."
+  },
+  "backend": {
+    "imageid": "kubernetes-kubeadm-2nodes"
+  },
+  "interface": {
+    "layout": "ide"
+  }
+}
