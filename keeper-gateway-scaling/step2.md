@@ -12,7 +12,7 @@
 
 ### **The Problem Without Scaling**:
 - Default: **1 gateway per configuration** (maxInstances=1)
-- If you try to run multiple instances, krouter rejects them with:
+- If you try to run multiple instances, Keeper rejects them with:
   ```
   "Maximum controllers connected"
   ```
@@ -20,7 +20,7 @@
 
 ### **The Solution - Enable Scaling**:
 - Set `maxInstances=3` using Commander
-- krouter now accepts **3 instances with same configuration**
+- Keeper now accepts **3 instances with same configuration**
 - Result: All 3 instances connect successfully and load balance
 
 ---
@@ -29,9 +29,6 @@
 
 First, verify Commander is installed and start an interactive shell:
 
-```bash
-keeper --version
-```
 `keeper --version`{{execute}}
 
 **✅ Expected Output**:
@@ -41,9 +38,6 @@ Keeper Commander, version 17.2.0 (or higher)
 
 **Start Commander Shell**:
 
-```bash
-keeper shell
-```
 `keeper shell`{{execute}}
 
 **✅ Expected Output**:
@@ -82,7 +76,9 @@ Password: [your-test-password]
 ```bash
 keeper shell --server keepersecurity.eu      # Europe
 keeper shell --server keepersecurity.com.au  # Australia
-keeper shell --server dev.keepersecurity.com # Development
+keeper shell --server keepersecurity.ca      # Canada
+keeper shell --server govcloud.keepersecurity.us  # US GovCloud
+keeper shell --server keepersecurity.jp      # Japan
 ```
 
 ---
@@ -138,21 +134,13 @@ pam gateway set-max-instances -g wM6mqZ_hQhWtLU225UNDcw -m 3
 
 **✅ Expected Output**:
 ```
-Using QRC hybrid encryption (ML-KEM key ID: 136, EC key ID: 10)
-ECDH completed: 32 byte shared secret
-ML-KEM-1024 completed: 32 byte secret, 1568 byte encapsulation
-...
-Starting new HTTPS connection (1): keepersecurity.com:443
-https://keepersecurity.com:443 "POST /api/rest/pam/set_controller_max_instance_count HTTP/1.1" 200 0
-
 Test Gateway Scaling Gateway 1: max instance count set to 3
 ```
 
 **🔍 What Just Happened?**
 - Commander sent API request to Keeper backend
 - Backend stored: `maxInstances=3` for this gateway UID
-- krouter will now accept up to 3 connections with the same configuration
-- All using secure QRC hybrid encryption (quantum-resistant!)
+- Keeper will now accept 3 connections with the same configuration (you can set any number)
 
 ---
 
@@ -192,20 +180,21 @@ Test Gateway Scaling Gateway 1    wM6mqZ_hQhWtLU225UNDcw  ONLINE (3 instances)
 | maxInstances | Allowed Connections | What Happens |
 |--------------|---------------------|--------------|
 | 1 (default) | Single instance | 2nd instance rejected with "Maximum controllers connected" |
-| 3 | Up to 3 instances | All 3 connect, krouter load balances requests |
-| 5 | Up to 5 instances | All 5 connect (if krouter supports it) |
+| 3 | Up to 3 instances | All 3 connect, Keeper load balances requests |
+| 5 | Up to 5 instances | All 5 connect (if Keeper supports it) |
 
 **Load Balancing Strategy**:
-- krouter maintains a **pool** of all connected instances
-- Each request is **randomly routed** to one instance in the pool
-- Distribution: ~33% per instance (with 3 instances)
+- Keeper maintains a **pool** of all connected instances
+- Each request is **randomly routed** to one instance in the pool (current version)
+- Future versions will support additional algorithms (round robin, least-loaded)
+- Distribution: ~33% per instance (with 3 instances in this tutorial)
 
 **Example Request Flow**:
 ```
-Request 1 → krouter picks: Instance 2 (MWUEEE)
-Request 2 → krouter picks: Instance 1 (XGMRPR)
-Request 3 → krouter picks: Instance 3 (SQRXZT)
-Request 4 → krouter picks: Instance 2 (MWUEEE) [random again]
+Request 1 → Keeper picks: Instance 2 (MWUEEE)
+Request 2 → Keeper picks: Instance 1 (XGMRPR)
+Request 3 → Keeper picks: Instance 3 (SQRXZT)
+Request 4 → Keeper picks: Instance 2 (MWUEEE) [random again]
 ```
 
 ---
@@ -215,31 +204,19 @@ Request 4 → krouter picks: Instance 2 (MWUEEE) [random again]
 The `pam gateway set-max-instances` command:
 
 1. **Authenticates** with Keeper backend using your session
-2. **Encrypts** the request using quantum-resistant cryptography (QRC)
-3. **Sends** API call: `POST /api/rest/pam/set_controller_max_instance_count`
+2. **Encrypts** the request using Keeper's secure encryption
+3. **Sends** API call to update the gateway configuration
 4. **Updates** the gateway record with new maxInstances value
 5. **Returns** confirmation message
 
-**API Endpoint Details**:
-- Endpoint: `/api/rest/pam/set_controller_max_instance_count`
-- Method: POST
-- Request: `{"controllerUid": "...", "maxInstances": 3}`
-- Response: 200 OK (success)
-
 **Storage**:
 - maxInstances is stored in Keeper's backend database
-- krouter queries this value when gateways connect
+- Keeper queries this value when gateways connect
 - Persists across gateway restarts and redeployments
 
 ---
 
 ## 🔒 Security Best Practices
-
-**Quantum-Resistant Encryption (QRC)**:
-- Commander uses **ML-KEM-1024** (quantum-resistant key encapsulation)
-- Also uses traditional **ECDH** for hybrid security
-- All API calls encrypted end-to-end
-- Future-proof against quantum computing attacks
 
 **Authentication Flow**:
 1. Commander authenticates with your Keeper account
@@ -292,7 +269,7 @@ pip3 install --upgrade keepercommander
 
 ## Command Reference
 
-**Available PAM Gateway Commands in Commander**:
+**Key PAM Gateway Commands in Commander**:
 
 ```bash
 # List all gateways
@@ -300,15 +277,6 @@ pam gateway list
 
 # Set max instances
 pam gateway set-max-instances -g <GATEWAY_UID> -m <MAX_INSTANCES>
-
-# Get gateway details
-pam gateway get <GATEWAY_UID>
-
-# Create new gateway
-dr-create-gateway --name "Gateway Name" --application "KSM App UID"
-
-# Remove gateway
-pam gateway remove <GATEWAY_UID>
 ```
 
 **Help Commands**:
@@ -324,7 +292,7 @@ pam gateway set-max-instances --help  # Show command-specific help
 **Before Setting maxInstances=3**:
 ```
 ┌──────────┐
-│ krouter  │
+│ Keeper  │
 └────┬─────┘
      │
      ▼
@@ -336,7 +304,7 @@ pam gateway set-max-instances --help  # Show command-specific help
 **After Setting maxInstances=3**:
 ```
 ┌──────────┐
-│ krouter  │
+│ Keeper  │
 └────┬─────┘
      │
      ├─ 33% → Gateway Instance 1 ┐
@@ -355,4 +323,4 @@ Configuration complete! In the next step, we'll:
 3. **Deploy to Kubernetes** and watch all 3 instances connect
 4. **Verify in Commander** that all 3 instances show as ONLINE
 
-Each instance will generate a **unique 6-character instance ID** (e.g., XGMRPR, MWUEEE, SQRXZT) and krouter will automatically load balance requests across all 3!
+Each instance will generate a **unique 6-character instance ID** (e.g., XGMRPR, MWUEEE, SQRXZT) and Keeper will automatically load balance requests across all 3!

@@ -215,10 +215,10 @@ Test Gateway Scaling App (XLi65XXWgBUkuUhf2ERfeg)
 
 In this step, you've created the complete PAM configuration:
 
-✅ **PAM Configuration**: Links gateway to resources
-✅ **PAM User Record**: Stores MySQL root credentials
-✅ **PAM Database Record**: Defines MySQL server with connection settings
-✅ **Verified Gateway**: All 3 instances online and ready
+- ✅ **PAM Configuration**: Links gateway to resources
+- ✅ **PAM User Record**: Stores MySQL root credentials
+- ✅ **PAM Database Record**: Defines MySQL server with connection settings
+- ✅ **Verified Gateway**: All 3 instances online and ready
 
 ### Summary of Records Created
 
@@ -282,12 +282,12 @@ Gateway
      ▼
 ┌──────────────────┐
 │  Keeper Vault    │ Retrieves credentials, gateway info
-│  (Backend)       │ Sends connection request to krouter
+│  (Backend)       │ Sends connection request to Keeper
 └────┬─────────────┘
      │
      ▼
 ┌──────────────────┐
-│  krouter         │ Selects 1 of 3 gateway instances (random)
+│  Keeper         │ Selects 1 of 3 gateway instances (random)
 │  (Load Balancer) │ Routes request with InstanceId header
 └────┬─────────────┘
      │
@@ -308,7 +308,7 @@ Gateway
 ```
 
 **Load Balancing**:
-- krouter picks **randomly** from available instances
+- Keeper picks **randomly** from available instances
 - Each instance has **33% probability** (with 3 instances)
 - Over 100 connections: ~33 per instance (statistically)
 
@@ -606,8 +606,8 @@ Test Gateway Scaling (Folder)
 1. User opens PAM Database record
 2. Vault retrieves credentials from PAM User record
 3. Vault retrieves gateway info from PAM Configuration
-4. Connection request sent to krouter
-5. krouter selects 1 of 3 gateway instances (random)
+4. Connection request sent to Keeper
+5. Keeper selects 1 of 3 gateway instances (random)
 6. Gateway establishes connection to MySQL
 7. Session recorded and encrypted
 8. Credentials returned to user (if JIT) or connection established

@@ -11,7 +11,7 @@
 ## Why Load Balancing Verification Matters?
 
 ### **Ensuring Proper Distribution**:
-- Confirms krouter is actually load balancing (not just connecting all 3)
+- Confirms Keeper is actually load balancing (not just connecting all 3)
 - Identifies if one instance is overloaded
 - Validates random selection algorithm working correctly
 
@@ -305,7 +305,7 @@ keeper-gateway   Deployment/keeper-gateway   cpu: 5%/70%            2         3 
 **What This Means**:
 - **TARGETS**: Current CPU is 5% (well below 70% threshold)
 - **MINPODS**: Will never scale below 2 instances
-- **MAXPODS**: Will never scale above 3 instances (krouter limit)
+- **MAXPODS**: Will never scale above 3 instances (configured in this tutorial, can be adjusted)
 - **REPLICAS**: Currently running 3 instances
 
 **💡 How HPA Works**:
@@ -342,7 +342,7 @@ kubectl get hpa -n keeper-gateway-scaled -w
 
 ### **Request Distribution Patterns**
 
-With 3 instances and random load balancing:
+With 3 instances and **random load balancing** (current algorithm):
 
 | Requests | Expected Distribution | Variance |
 |----------|----------------------|----------|
@@ -384,7 +384,7 @@ Pod 8b9mz (SQRXZT): 3 connections (30%)
 | **1 pod killed** | ❌ 33% capacity lost | ✅ Kubernetes recreates in ~30s |
 | **1 node failure** | ❌ 33% capacity lost | ✅ Pod rescheduled to another node |
 | **Gateway version update** | ❌ No impact | ✅ RollingUpdate ensures 2-3 pods always running |
-| **krouter maintenance** | ❌ All connections lost | ✅ Gateways reconnect automatically |
+| **Keeper maintenance** | ❌ All connections lost | ✅ Gateways reconnect automatically |
 
 **Result**: Enterprise-grade reliability! 🛡️
 
@@ -392,9 +392,9 @@ Pod 8b9mz (SQRXZT): 3 connections (30%)
 
 ## 🔍 Advanced Verification
 
-### **Test 1: Check Instance Pool in krouter**
+### **Test 1: Check Instance Pool in Keeper**
 
-**What krouter sees** (backend perspective):
+**What Keeper sees** (backend perspective):
 
 ```json
 {
@@ -429,7 +429,7 @@ Pod 8b9mz (SQRXZT): 3 connections (30%)
 
 **Routing Logic**:
 ```kotlin
-// krouter random selection (pseudocode)
+// Keeper random selection (pseudocode)
 val availableInstances = pool.filter { it.status == ONLINE }
 val selectedInstance = availableInstances.random()
 routeRequest(selectedInstance.instanceId)
@@ -584,7 +584,7 @@ kubectl logs -n keeper-gateway-scaled -l app=keeper-gateway --tail=1000
 ```
 "Generated gateway instance ID:"    # Pod startup
 "Gateway is online"                 # Connection success
-"Connection to remote host was lost" # krouter disconnect
+"Connection to remote host was lost" # Keeper disconnect
 "Maximum controllers connected"     # Scaling limit hit (error!)
 ```
 
@@ -594,25 +594,25 @@ kubectl logs -n keeper-gateway-scaled -l app=keeper-gateway --tail=1000
 
 In this step, you've confirmed:
 
-✅ **Load Balancing Works**:
-- All 3 instances receive requests
-- Random distribution across instances
-- krouter selects from available pool
+- ✅ **Load Balancing Works**:
+  - All 3 instances receive requests
+  - Random distribution across instances
+  - Keeper selects from available pool
 
-✅ **High Availability Works**:
-- Deleting a pod = zero downtime
-- Kubernetes auto-heals failed pods
-- New pods join pool automatically
+- ✅ **High Availability Works**:
+  - Deleting a pod = zero downtime
+  - Kubernetes auto-heals failed pods
+  - New pods join pool automatically
 
-✅ **Resource Management Works**:
-- HPA monitoring CPU and memory
-- Pods stay within resource limits
-- Auto-scaling ready (if needed)
+- ✅ **Resource Management Works**:
+  - HPA monitoring CPU and memory
+  - Pods stay within resource limits
+  - Auto-scaling ready (if needed)
 
-✅ **Zero Downtime Updates**:
-- RollingUpdate strategy works
-- Old pods replaced gradually
-- At least 2 pods always available
+- ✅ **Zero Downtime Updates**:
+  - RollingUpdate strategy works
+  - Old pods replaced gradually
+  - At least 2 pods always available
 
 ---
 

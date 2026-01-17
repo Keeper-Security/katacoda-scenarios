@@ -41,7 +41,7 @@ This interactive tutorial teaches users how to deploy and configure multiple Kee
 ### **Versions**
 - Keeper Gateway: 1.7.6+
 - Commander CLI: 17.2+
-- krouter: 1.6.0+
+- Keeper: 1.6.0+
 - Kubernetes: 1.19+
 
 ### **Killercoda Environment**
@@ -87,7 +87,7 @@ After completing this tutorial, students will be able to:
 ## Architecture Covered
 
 ```
-User → krouter (Load Balancer)
+User → Keeper (Load Balancer)
          ↓ (random selection)
          ├─ Gateway Instance 1 (33%)
          ├─ Gateway Instance 2 (33%)
@@ -98,7 +98,7 @@ User → krouter (Load Balancer)
 
 **Key Concepts**:
 - Instance ID generation (6-character random uppercase)
-- krouter load balancing (random selection algorithm)
+- Keeper load balancing (random selection algorithm)
 - Kubernetes RollingUpdate strategy (zero downtime)
 - Pod anti-affinity (spread across nodes)
 - HPA auto-scaling (2-3 replicas based on CPU/memory)
@@ -125,7 +125,7 @@ This scenario has been tested with:
 - ✅ Keeper Gateway 1.7.6
 - ✅ Commander 17.2+
 - ✅ MySQL 8.0
-- ✅ krouter production environment
+- ✅ Keeper production environment
 
 **Test Results**:
 - All 5 steps completed successfully

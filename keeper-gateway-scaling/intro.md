@@ -5,9 +5,9 @@
 Keeper Gateway Scaling enables you to run **multiple gateway instances** with the same configuration for horizontal scaling and high availability. This feature distributes PAM workloads across several gateway instances, allowing for greater capacity, better performance, and zero-downtime failover.
 
 **Key Benefits:**
-- **3x Throughput**: Run up to 3 instances per configuration for 3x capacity
+- **Horizontal Scaling**: Run multiple instances per configuration (this tutorial uses 3 as an example)
 - **Zero Downtime**: Automatic failover if one instance crashes
-- **Load Balancing**: Requests randomly distributed across all instances
+- **Load Balancing**: Requests distributed across all instances (currently random, future versions will support round robin and least-loaded algorithms)
 - **Easy Setup**: One Commander command to enable scaling
 - **Same Configuration**: All instances share identical credentials and settings
 
@@ -16,10 +16,10 @@ Keeper Gateway Scaling enables you to run **multiple gateway instances** with th
 In this interactive tutorial, you will:
 
 1. **Create a Gateway** in Keeper Vault and provision it for Kubernetes deployment
-2. **Configure Gateway Scaling** using Commander CLI (`pam gateway set-max-instances`)
-3. **Deploy Multiple Gateway Instances** to Kubernetes with a single manifest
+2. **Configure Gateway Scaling** using Commander CLI (`pam gateway set-max-instances`) - we'll use 3 instances as an example
+3. **Deploy Multiple Gateway Instances** to Kubernetes with a single manifest (3 replicas)
 4. **Configure PAM Records** (Configuration, User, Database) for testing connections
-5. **Verify Load Balancing** across all gateway instances in real-time
+5. **Verify Load Balancing** across all gateway instances in real-time (random distribution)
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ Before starting this tutorial, you should have:
 ## Key Features You'll Explore
 
 - **Instance ID Generation**: Each gateway generates a unique 6-character ID on startup
-- **krouter Load Balancing**: Random request distribution across gateway pool
+- **Keeper Load Balancing**: Random request distribution across gateway pool
 - **High Availability**: Kubernetes auto-healing and zero-downtime updates
 - **Commander CLI**: `pam gateway set-max-instances` command
 - **PAM Configuration**: Connecting databases through scaled gateways
@@ -44,7 +44,7 @@ Before starting this tutorial, you should have:
 |-----------|----------------|
 | Keeper Gateway | 1.7.6+ |
 | Commander CLI | 17.2+ |
-| krouter | 1.6.0+ |
+| Keeper | 1.6.0+ |
 | Kubernetes | 1.19+ |
 
 ---

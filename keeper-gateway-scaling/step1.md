@@ -39,7 +39,7 @@ First, create a folder to organize your gateway resources:
 
 **Why a Shared Folder?**
 - Shared folders allow team collaboration
-- KSM Applications can access multiple records in one folder
+- KSM Applications can access multiple shared folders (not just one)
 - Easier organization for PAM configurations and credentials
 
 ---
@@ -142,10 +142,10 @@ Let's verify the gateway was created successfully:
 
 In this step, you've:
 
-✅ **Created a shared folder** to organize gateway resources
-✅ **Created a KSM Application** with access to that folder
-✅ **Provisioned a Keeper Gateway** ready for Kubernetes deployment
-✅ **Obtained the base64 configuration** needed for deployment
+- ✅ **Created a shared folder** to organize gateway resources
+- ✅ **Created a KSM Application** with access to that folder
+- ✅ **Provisioned a Keeper Gateway** ready for Kubernetes deployment
+- ✅ **Obtained the base64 configuration** needed for deployment
 
 **What's Next?**
 - The gateway is created but **not running yet** (status: Offline)
@@ -155,13 +155,6 @@ In this step, you've:
 ---
 
 ## 💡 Key Concepts
-
-**Gateway Configuration Components**:
-- `hostname`: Keeper environment (keepersecurity.com, dev.keepersecurity.com, etc.)
-- `clientId`: Gateway authentication credentials (encrypted)
-- `privateKey`: Gateway's private key for encryption
-- `appKey`: Application encryption key
-- `appOwnerPublicKey`: Application owner's public key for verification
 
 **Why Base64 Encoding?**
 - Kubernetes Secrets accept base64 encoded values
@@ -182,8 +175,10 @@ In this step, you've:
 - Check that you have permissions to create gateways
 
 **Issue: Lost the base64 configuration**
-- **Solution**: Open the gateway in vault → Click the gear icon → View configuration
-- You can re-copy the configuration anytime
+- **Solution**: The configuration is **one-time access only** for security
+- You **cannot** retrieve it again from the vault
+- **If lost**: Delete the gateway and create a new one to get a new configuration
+- **Best Practice**: Save the configuration immediately in a secure location (password manager, encrypted file)
 
 ---
 
@@ -191,4 +186,4 @@ In this step, you've:
 
 In the next step, we'll use **Keeper Commander CLI** to configure this gateway for scaling by setting the maximum number of instances to 3.
 
-This will enable the gateway to accept multiple connections with the same configuration, allowing Kubernetes to run 3 replicas that krouter will load balance across!
+This will enable the gateway to accept multiple connections with the same configuration, allowing Kubernetes to run 3 replicas that Keeper router will load balance across!

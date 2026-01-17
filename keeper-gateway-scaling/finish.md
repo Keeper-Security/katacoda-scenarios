@@ -8,7 +8,7 @@ Throughout these 5 steps, you've become proficient in deploying and managing sca
 - ✅ **Configure gateway scaling** using Commander CLI (`pam gateway set-max-instances`)
 - ✅ **Deploy multiple gateway instances** to Kubernetes with a single manifest (3 replicas)
 - ✅ **Configure PAM records** (Configuration, User, Database) for secure database access
-- ✅ **Verify load balancing** across gateway instances using krouter's random selection
+- ✅ **Verify load balancing** across gateway instances using Keeper's random selection
 - ✅ **Test high availability** by simulating pod failures and confirming zero downtime
 - ✅ **Monitor resource usage** with HPA and kubectl top commands
 - ✅ **Understand the architecture** of scaled gateways, instance IDs, and request routing
@@ -39,7 +39,7 @@ Throughout these 5 steps, you've become proficient in deploying and managing sca
 
 ### **Verification Tests Passed**
 
-- ✅ All 3 gateway instances connected to krouter
+- ✅ All 3 gateway instances connected to Keeper
 - ✅ Unique instance IDs generated for each pod
 - ✅ Load balancing verified (random distribution)
 - ✅ High availability tested (pod deletion = zero downtime)
@@ -98,7 +98,7 @@ spec:
     - namespaceSelector: {}
   - to:
     - podSelector: {}
-  - ports:  # Allow krouter communication
+  - ports:  # Allow Keeper communication
     - port: 443
       protocol: TCP
 ```
@@ -174,11 +174,13 @@ kubectl get all,secrets,configmaps -n keeper-gateway-scaled -o yaml > backup.yam
 
 ### 6. **Scaling Beyond 3 Instances**
 
-**Current Limitations**:
-- krouter currently limits each gateway to **3 instances max**
-- This is a safety measure during initial rollout
+**This Tutorial Uses 3 as an Example**:
+- You can configure **any number of instances** via Commander
+- Example: `pam gateway set-max-instances -g <UID> -m 5` (5 instances)
+- Example: `pam gateway set-max-instances -g <UID> -m 10` (10 instances)
+- Keeper supports multiple instances per configuration (exact limit depends on deployment)
 
-**Future Scaling** (when krouter increases limit):
+**Scaling to More Instances**:
 ```bash
 # Set maxInstances to 5
 pam gateway set-max-instances -g <GATEWAY_UID> -m 5
@@ -195,6 +197,14 @@ kubectl edit hpa keeper-gateway -n keeper-gateway-scaled
 - **High connection volume**: >150 concurrent connections
 - **Geographic distribution**: Instances in different regions
 - **Workload segregation**: Some instances for rotation, others for connections
+
+**Load Balancing Evolution**:
+- **Current Version**: Random selection across available instances
+- **Future Versions**: Additional algorithms available:
+  - Round robin (fair distribution)
+  - Least-loaded (route to instance with fewest active connections)
+  - Weighted distribution (prioritize certain instances)
+  - Geographic routing (route to nearest instance)
 
 ---
 
@@ -303,7 +313,7 @@ Before deploying to production, ensure:
 Thank you for completing this tutorial! You've gained hands-on experience with:
 
 🔐 **Keeper Gateway Scaling** - Horizontal scaling for PAM workloads
-⚖️ **Load Balancing** - Random distribution via krouter
+⚖️ **Load Balancing** - Random distribution via Keeper
 🛡️ **High Availability** - Zero-downtime failover with Kubernetes
 📊 **Observability** - Monitoring, logging, and metrics
 🎯 **Production Readiness** - Best practices for enterprise deployments

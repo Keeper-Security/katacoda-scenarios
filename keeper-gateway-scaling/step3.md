@@ -6,7 +6,7 @@
 - How to create a Kubernetes deployment manifest for Keeper Gateway
 - How to configure gateway scaling in Kubernetes (3 replicas)
 - How to deploy MySQL as a test target database
-- How to verify all gateway instances connected to krouter
+- How to verify all gateway instances connected to Keeper
 
 ## Why Kubernetes for Gateway Scaling?
 
@@ -223,9 +223,8 @@ spec:
     targetPort: 3306
 EOF
 ```
-`cat > gateway-scaled.yaml <<'EOF'
-[Full YAML content here - too long for {{execute}}]
-EOF`{{execute}}
+
+**Note**: Copy the full YAML content above and run it in your terminal, or use the Killercoda editor to create the file.
 
 **✅ Expected Output**: `gateway-scaled.yaml` file created.
 
@@ -386,9 +385,9 @@ kubectl logs -n keeper-gateway-scaled $POD3 | grep "Generated gateway instance I
 
 ---
 
-## 7. Verify Connection to krouter
+## 7. Verify Connection to Keeper
 
-Check that all pods connected to krouter successfully:
+Check that all pods connected to Keeper successfully:
 
 **Quick check all pods**:
 ```bash
@@ -422,7 +421,7 @@ Test Gateway Scaling App (XLi65XXWgBUkuUhf2ERfeg)
     |- Instance 3 (connected: 2026-01-15 15:04:20)        [NAT_IP]  ONLINE  1.7.6
 ```
 
-**🎉 Perfect!** All 3 instances are **ONLINE** and connected to krouter!
+**🎉 Perfect!** All 3 instances are **ONLINE** and connected to Keeper!
 
 ---
 
@@ -460,8 +459,8 @@ Each of the 3 gateway pods:
        return ''.join(secrets.choice(alphabet) for _ in range(length))
    ```
 3. Result: Random 6-character ID (e.g., **XGMRPR**)
-4. Gateway sends `InstanceId: XGMRPR` header in all krouter API calls
-5. krouter tracks this instance in the gateway pool
+4. Gateway sends `InstanceId: XGMRPR` header in all Keeper API calls
+5. Keeper tracks this instance in the gateway pool
 
 **Example Instance IDs**:
 - Pod 1: `XGMRPR`
@@ -472,7 +471,7 @@ Each of the 3 gateway pods:
 - Prevents collisions if pods restart
 - No database coordination needed
 - Simple and stateless
-- krouter handles duplicate detection
+- Keeper handles duplicate detection
 
 ---
 
@@ -492,7 +491,7 @@ Each of the 3 gateway pods:
 ### **After Deployment (Step 3)**:
 ```
 ┌──────────────────────────────────────────────┐
-│            krouter (Load Balancer)           │
+│            Keeper (Load Balancer)           │
 │  Gateway Pool: wM6mqZ_hQhWtLU225UNDcw        │
 │  ┌─────────┐  ┌─────────┐  ┌─────────┐     │
 │  │ XGMRPR  │  │ MWUEEE  │  │ SQRXZT  │     │
@@ -536,7 +535,7 @@ Each of the 3 gateway pods:
 1. **Base64 Encoding**: Configuration is base64 encoded
 2. **Kubernetes Secret**: Stored in etcd (encrypted at rest)
 3. **Private Keys**: Never leave the gateway pod
-4. **TLS**: All communication with krouter over HTTPS
+4. **TLS**: All communication with Keeper over HTTPS
 5. **Authentication**: Each request signed with gateway credentials
 
 **⚠️ Production Best Practices**:
@@ -653,7 +652,7 @@ affinity:
 
 ### **Shared Configuration, Unique Instances**
 
-All 3 pods use the **same** GATEWAY_CONFIG, but krouter sees them as **different instances** because:
+All 3 pods use the **same** GATEWAY_CONFIG, but Keeper sees them as **different instances** because:
 
 | Property | Shared or Unique | Value |
 |----------|------------------|-------|
@@ -689,4 +688,4 @@ Deployment complete! In the next step, we'll:
 3. **Create PAM Database record** pointing to our MySQL server
 4. **Test connections** through the scaled gateway
 
-This will allow us to verify that krouter is load balancing requests across all 3 gateway instances!
+This will allow us to verify that Keeper is load balancing requests across all 3 gateway instances!
