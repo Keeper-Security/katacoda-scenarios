@@ -530,25 +530,19 @@ pam gateway list
 **Symptom**: `kubectl exec ... mysql` command fails.
 
 **Check MySQL is running**:
-```bash
-kubectl get pods -n keeper-gateway-scaled -l app=mysql
-```
+
 `kubectl get pods -n keeper-gateway-scaled -l app=mysql`{{execute}}
 
 **Expected**: Shows `Running` status.
 
 **Test DNS resolution**:
-```bash
-kubectl exec -n keeper-gateway-scaled deployment/keeper-gateway -- nslookup mysql
-```
+
 `kubectl exec -n keeper-gateway-scaled deployment/keeper-gateway -- nslookup mysql`{{execute}}
 
 **Expected**: Resolves to ClusterIP address (e.g., 172.20.169.56).
 
 **Test port connectivity**:
-```bash
-kubectl exec -n keeper-gateway-scaled deployment/keeper-gateway -- nc -zv mysql 3306
-```
+
 `kubectl exec -n keeper-gateway-scaled deployment/keeper-gateway -- nc -zv mysql 3306`{{execute}}
 
 **Expected**: `Connection to mysql 3306 port [tcp/mysql] succeeded!`

@@ -253,9 +253,7 @@ GATEWAY_CONFIG: eyJob3N0bmFtZSI6ImtlZXBlcnNlY3VyaXR5LmNvbSIsImNsaWVudElk...
 **Save and exit**: Press `ESC`, then type `:wq` and press Enter.
 
 **💡 Verification**:
-```bash
-grep "GATEWAY_CONFIG:" gateway-scaled.yaml
-```
+
 `grep "GATEWAY_CONFIG:" gateway-scaled.yaml`{{execute}}
 
 **✅ Expected**: Should show your actual base64 config (not the placeholder).
@@ -266,9 +264,6 @@ grep "GATEWAY_CONFIG:" gateway-scaled.yaml
 
 Now deploy the manifest to create all resources:
 
-```bash
-kubectl apply -f gateway-scaled.yaml
-```
 `kubectl apply -f gateway-scaled.yaml`{{execute}}
 
 **✅ Expected Output**:
@@ -295,9 +290,6 @@ service/mysql created
 
 Monitor the deployment progress:
 
-```bash
-kubectl get pods -n keeper-gateway-scaled -w
-```
 `kubectl get pods -n keeper-gateway-scaled -w`{{execute}}
 
 **Expected Pod Lifecycle**:
@@ -328,9 +320,6 @@ mysql-9c65ccf57-mnop              1/1     Running             0          40s
 
 Check the final state:
 
-```bash
-kubectl get pods -n keeper-gateway-scaled
-```
 `kubectl get pods -n keeper-gateway-scaled`{{execute}}
 
 **✅ Expected Output**:
@@ -343,9 +332,7 @@ mysql-9c65ccf57-mnop              1/1     Running   0          2m
 ```
 
 **Get Pod Names** (we'll need these for checking logs):
-```bash
-kubectl get pods -n keeper-gateway-scaled -l app=keeper-gateway -o name
-```
+
 `kubectl get pods -n keeper-gateway-scaled -l app=keeper-gateway -o name`{{execute}}
 
 **Expected**: List of 3 pod names.
@@ -390,9 +377,7 @@ kubectl logs -n keeper-gateway-scaled $POD3 | grep "Generated gateway instance I
 Check that all pods connected to Keeper successfully:
 
 **Quick check all pods**:
-```bash
-kubectl logs -n keeper-gateway-scaled -l app=keeper-gateway --tail=100 | grep "Gateway is online"
-```
+
 `kubectl logs -n keeper-gateway-scaled -l app=keeper-gateway --tail=100 | grep "Gateway is online"`{{execute}}
 
 **✅ Expected**: Should see "Gateway is online" messages from all 3 pods.
@@ -554,9 +539,7 @@ Each of the 3 gateway pods:
 **Symptom**: Pods keep restarting with errors.
 
 **Check logs**:
-```bash
-kubectl logs -n keeper-gateway-scaled deployment/keeper-gateway --tail=50
-```
+
 `kubectl logs -n keeper-gateway-scaled deployment/keeper-gateway --tail=50`{{execute}}
 
 **Common Causes**:
@@ -576,9 +559,7 @@ pam gateway set-max-instances -g <YOUR_GATEWAY_UID> -m 3
 ### Issue: MySQL Not Starting
 
 **Check MySQL logs**:
-```bash
-kubectl logs -n keeper-gateway-scaled deployment/mysql
-```
+
 `kubectl logs -n keeper-gateway-scaled deployment/mysql`{{execute}}
 
 **Common Causes**:

@@ -27,9 +27,6 @@
 
 Let's stream logs from all 3 gateway pods in real-time:
 
-```bash
-kubectl logs -n keeper-gateway-scaled -l app=keeper-gateway -f --max-log-requests=10
-```
 `kubectl logs -n keeper-gateway-scaled -l app=keeper-gateway -f --max-log-requests=10`{{execute}}
 
 **What to Look For**:
@@ -148,9 +145,7 @@ Let's simulate a pod failure and verify zero downtime:
 ### **Execute Chaos Test**:
 
 **Step 1: Note current pods**:
-```bash
-kubectl get pods -n keeper-gateway-scaled -l app=keeper-gateway
-```
+
 `kubectl get pods -n keeper-gateway-scaled -l app=keeper-gateway`{{execute}}
 
 **Step 2: Delete the first pod**:
@@ -162,9 +157,7 @@ kubectl delete -n keeper-gateway-scaled $POD_TO_DELETE
 `POD_TO_DELETE=$(kubectl get pods -n keeper-gateway-scaled -l app=keeper-gateway -o name | head -1) && kubectl delete -n keeper-gateway-scaled $POD_TO_DELETE`{{execute}}
 
 **Step 3: Watch the recreation**:
-```bash
-kubectl get pods -n keeper-gateway-scaled -l app=keeper-gateway -w
-```
+
 `kubectl get pods -n keeper-gateway-scaled -l app=keeper-gateway -w`{{execute}}
 
 **Expected Timeline**:
@@ -265,9 +258,6 @@ done
 
 Monitor resource consumption across all pods:
 
-```bash
-kubectl top pods -n keeper-gateway-scaled
-```
 `kubectl top pods -n keeper-gateway-scaled`{{execute}}
 
 **✅ Expected Output** (example):
@@ -290,9 +280,6 @@ mysql-9c65ccf57-xx69l             15m          280Mi
 
 Check if HPA is tracking metrics:
 
-```bash
-kubectl get hpa -n keeper-gateway-scaled
-```
 `kubectl get hpa -n keeper-gateway-scaled`{{execute}}
 
 **✅ Expected Output**:
@@ -327,9 +314,7 @@ kubectl exec -n keeper-gateway-scaled deployment/keeper-gateway -- \
 ```
 
 **Watch HPA react**:
-```bash
-kubectl get hpa -n keeper-gateway-scaled -w
-```
+
 `kubectl get hpa -n keeper-gateway-scaled -w`{{execute}}
 
 **Expected**: CPU % will increase, but we're already at max replicas (3), so no scaling action.
@@ -538,9 +523,7 @@ done
 ### **Key Metrics to Monitor**
 
 **Gateway Pod Metrics**:
-```bash
-kubectl top pods -n keeper-gateway-scaled
-```
+
 `kubectl top pods -n keeper-gateway-scaled`{{execute}}
 
 | Metric | Normal Range | Alert Threshold |
@@ -550,9 +533,7 @@ kubectl top pods -n keeper-gateway-scaled
 | **Restarts** | 0-1 | >5 (pod unstable) |
 
 **Deployment Health**:
-```bash
-kubectl get deployment -n keeper-gateway-scaled
-```
+
 `kubectl get deployment -n keeper-gateway-scaled`{{execute}}
 
 **Expected**:
@@ -680,9 +661,7 @@ kubectl get hpa -n keeper-gateway-scaled
 **Symptom**: All 3 pods on same node.
 
 **Check pod distribution**:
-```bash
-kubectl get pods -n keeper-gateway-scaled -o wide
-```
+
 `kubectl get pods -n keeper-gateway-scaled -o wide`{{execute}}
 
 **Solution**: Anti-affinity is **preferred** (not required). If cluster has limited nodes, Kubernetes may schedule multiple pods on one node. This is OK for testing!

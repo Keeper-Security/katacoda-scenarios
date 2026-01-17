@@ -260,9 +260,7 @@ The `pam gateway set-max-instances` command:
 **Symptom**: `keeper: command not found`
 
 **Solution**:
-```bash
-pip3 install --upgrade keepercommander
-```
+
 `pip3 install --upgrade keepercommander`{{execute}}
 
 ---

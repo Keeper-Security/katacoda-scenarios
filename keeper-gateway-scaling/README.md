@@ -41,7 +41,6 @@ This interactive tutorial teaches users how to deploy and configure multiple Kee
 ### **Versions**
 - Keeper Gateway: 1.7.6+
 - Commander CLI: 17.2+
-- Keeper: 1.6.0+
 - Kubernetes: 1.19+
 
 ### **Killercoda Environment**

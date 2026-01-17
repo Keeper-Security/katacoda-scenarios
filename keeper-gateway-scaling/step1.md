@@ -154,16 +154,6 @@ In this step, you've:
 
 ---
 
-## 💡 Key Concepts
-
-**Why Base64 Encoding?**
-- Kubernetes Secrets accept base64 encoded values
-- Protects binary data in YAML manifests
-- Standard format for configuration storage
-- Easy to copy/paste without formatting issues
-
----
-
 ## Troubleshooting
 
 **Issue: Can't find "Secrets Manager" menu**
