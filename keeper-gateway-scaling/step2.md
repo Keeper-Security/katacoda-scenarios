@@ -74,11 +74,11 @@ Password: [your-test-password]
 
 **💡 Multi-Region Support**: If using a different region:
 ```bash
-keeper shell --server keepersecurity.eu      # Europe
-keeper shell --server keepersecurity.com.au  # Australia
-keeper shell --server keepersecurity.ca      # Canada
-keeper shell --server govcloud.keepersecurity.us  # US GovCloud
-keeper shell --server keepersecurity.jp      # Japan
+keeper shell --server EU   # Europe
+keeper shell --server AU   # Australia
+keeper shell --server CA   # Canada
+keeper shell --server JP   # Japan
+keeper shell --server GOV  # US GovCloud
 ```
 
 ---
