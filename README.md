@@ -6,35 +6,35 @@
 
 This table provides a quick overview of the key features covered in each Keeper Secrets Manager (KSM) SDK and integration tutorial available in this repository.
 
-| Feature                        | Python SDK | Java SDK | .NET SDK | Go SDK   | JavaScript SDK | Ansible | KSM CLI | Terraform | HashiCorp Vault |
-|--------------------------------|------------|----------|----------|----------|----------------|---------|---------|-----------|-----------------|
-| **Setup & Installation**       | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              |
-| **Initial Connection/Auth**    | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              |
-|  - One-Time Token              | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ➖        | ➖              |
-|  - Config File (ksm-config.json)| ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ➖              |
-|  - Base64/In-Memory Config     | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              |
-| **List All Shared Records**    | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ➖        | ✅              |
-| **Get Specific Record by UID** | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              |
-| **Get Specific Record by Title**| ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ➖        | ➖              |
-| **Access Record Fields**       | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              |
-|  - Standard Fields             | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              |
-|  - Custom Fields               | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ✅        | ✅              |
-|  - Notes                       | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ✅              |
-| **Record Creation**            | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ✅              |
-|  - With Various Field Types    | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ✅              |
-|  - With Password Generation    | ✅         | ✅       | ✅       | ✅       | ✅             | N/A     | N/A     | 🛠️        | ➖              |
-| **Record Update**              | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ✅        | ✅              |
-| **Record Deletion**            | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ✅              |
-| **Folder Creation/Mgmt.**      | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              |
-|  - Create Folder               | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              |
-|  - List Folders                | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              |
-|  - Rename Folder               | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              |
-|  - Delete Folder               | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              |
-| **File Upload to Record**      | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ✅        | ➖              |
-| **File Download from Record**  | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ➖              |
-| **File Delete from Record**    | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              |
-| **Client-Side Caching**        | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ➖        | ➖              |
-| **CLI/Tool Specific Features** | N/A        | N/A      | N/A      | N/A      | N/A            | ✅      | ✅      | N/A       | ✅              |
+| Feature                        | Python SDK | Java SDK | .NET SDK | Go SDK   | JavaScript SDK | Ansible | KSM CLI | Terraform | HashiCorp Vault | GitHub Actions |
+|--------------------------------|------------|----------|----------|----------|----------------|---------|---------|-----------|-----------------|----------------|
+| **Setup & Installation**       | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              | ✅             |
+| **Initial Connection/Auth**    | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              | ✅             |
+|  - One-Time Token              | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ➖        | ➖              | ➖             |
+|  - Config File (ksm-config.json)| ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ➖              | ➖             |
+|  - Base64/In-Memory Config     | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              | ✅             |
+| **List All Shared Records**    | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ➖        | ✅              | ➖             |
+| **Get Specific Record by UID** | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              | ✅             |
+| **Get Specific Record by Title**| ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ➖        | ➖              | ✅             |
+| **Access Record Fields**       | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              | ✅             |
+|  - Standard Fields             | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ✅              | ✅             |
+|  - Custom Fields               | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ✅        | ✅              | ✅             |
+|  - Notes                       | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ✅              | ➖             |
+| **Record Creation**            | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ✅              | ➖             |
+|  - With Various Field Types    | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ✅              | ➖             |
+|  - With Password Generation    | ✅         | ✅       | ✅       | ✅       | ✅             | N/A     | N/A     | 🛠️        | ➖              | ➖             |
+| **Record Update**              | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ✅        | ✅              | ➖             |
+| **Record Deletion**            | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ✅              | ➖             |
+| **Folder Creation/Mgmt.**      | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              | ➖             |
+|  - Create Folder               | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              | ➖             |
+|  - List Folders                | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              | ➖             |
+|  - Rename Folder               | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              | ➖             |
+|  - Delete Folder               | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              | ➖             |
+| **File Upload to Record**      | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ✅      | ✅        | ➖              | ➖             |
+| **File Download from Record**  | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ✅        | ➖              | ✅             |
+| **File Delete from Record**    | ✅         | ✅       | ✅       | ✅       | ✅             | ➖      | ➖      | ✅        | ➖              | ➖             |
+| **Client-Side Caching**        | ✅         | ✅       | ✅       | ✅       | ✅             | ✅      | ✅      | ➖        | ➖              | ➖             |
+| **CLI/Tool Specific Features** | N/A        | N/A      | N/A      | N/A      | N/A            | ✅      | ✅      | N/A       | ✅              | ✅             |
 
 **Legend:**
 - ✅: Feature is explicitly covered or conceptually explained in the tutorial.

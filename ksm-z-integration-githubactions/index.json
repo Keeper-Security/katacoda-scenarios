@@ -1,5 +1,5 @@
 {
-  "noindex": true,
+  "noindex": false,
   "title": "KSM Integration: GitHub Actions",
   "description": "Learn to securely inject Keeper Secrets Manager (KSM) secrets into GitHub Actions workflows using the KSM GitHub Action.",
   "details": {
