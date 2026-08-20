@@ -66,6 +66,19 @@ ksm secret get [UID] --field [FIELD_NAME]
 ```
 `ksm secret get [UID] --field [FIELD_NAME]`{{copy}}
 
+### Get Record Notes
+
+Record notes are **not** a field. They are a record-level property, so `--field notes` fails with `Cannot find the field notes in record ...`. Use a JSONPath query instead:
+
+```bash
+ksm secret get [UID] --query notes --raw
+```
+`ksm secret get [UID] --query notes --raw`{{copy}}
+
+**💡 Why `--raw`?**: Without it the value is returned JSON-encoded, wrapped in double quotes, which is awkward when assigning it to a variable.
+
+**⚠️ Watch Out**: `--field` matches field labels first, then field types. If a record happens to have a custom field *labeled* "notes", then `--field notes` returns that custom field's value instead of the record notes, with no error to warn you.
+
 ## Search for Secrets
 
 Search for secrets by title using regex pattern matching:

@@ -46,6 +46,35 @@ ksm profile init --token XX:XXXX
 
 **✅ Expected Output**: Added profile _default to INI config file...
 
+## Alternative: Import an Existing Configuration
+
+A One-Time Access Token can only be redeemed once. If you already have a Base64 KSM configuration — exported from another machine with `ksm profile export`, or issued to you by an administrator — import it directly instead of using a token:
+
+```bash
+ksm profile import [BASE64_CONFIG]
+```
+`ksm profile import [BASE64_CONFIG]`{{copy}}
+
+Import into a named profile rather than `_default`:
+
+```bash
+ksm profile import --profile-name production [BASE64_CONFIG]
+```
+`ksm profile import --profile-name production [BASE64_CONFIG]`{{copy}}
+
+Repeat with different profile names to keep several applications in one `keeper.ini` — an existing file is merged, not overwritten.
+
+**💡 Importing from a file**: `ksm profile import` expects the Base64 string itself, not a file path. If your configuration is stored in a file, pass its contents in. The `tr` command strips any line wrapping or trailing newline:
+
+```bash
+ksm profile import "$(tr -d '\n\r' < /path/to/config.b64)"
+```
+`ksm profile import "$(tr -d '\n\r' < /path/to/config.b64)"`{{copy}}
+
+**✅ Expected Output**: `Imported config saved to profile _default at ...`, plus a notice that permissions were set to `0600` (owner-only access).
+
+**🔒 Security Note**: A configuration passed as a command-line argument is visible in your shell history and in `ps` output. For automation, prefer the `KSM_CONFIG` environment variable instead (covered in Step 4).
+
 ## Verify Configuration
 
 After initialization, verify your profile was created:
