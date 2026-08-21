@@ -69,7 +69,7 @@ echo "Password retrieved: $MY_PASSWORD"
 **✅ Expected Output**: Shows the actual password from your secret.
 
 ### Get Other Fields Using Notation
-Common field names: `login`, `password`, `url`, `notes`
+Common field types: `login`, `password`, `url`
 
 ```bash
 export MY_USERNAME=$(ksm secret notation keeper://[RECORD_UID]/field/login)
@@ -78,6 +78,20 @@ export MY_URL=$(ksm secret notation keeper://[RECORD_UID]/field/url)
 `export MY_USERNAME=$(ksm secret notation keeper://[RECORD_UID]/field/login)`{{copy}}
 
 **💡 Pro Tip**: Use `ksm secret get [UID]` first to see all available field names for a record.
+
+### Get Record Notes, Title, and Type Using Notation
+
+`notes`, `title`, and `type` are record-level **selectors**, not fields. They replace the `field/[field_name]` portion of the notation rather than appearing inside it:
+
+```bash
+export MY_NOTES=$(ksm secret notation keeper://[RECORD_UID]/notes)
+export MY_TITLE=$(ksm secret notation keeper://[RECORD_UID]/title)
+```
+`export MY_NOTES=$(ksm secret notation keeper://[RECORD_UID]/notes)`{{copy}}
+
+**⚠️ Common Mistake**: `keeper://[UID]/field/notes` does **not** work. Notation looks for a *field* named or typed "notes", which standard record types do not have. Use `keeper://[UID]/notes` instead.
+
+**📝 Note**: The `encryptedNotes` record type also has a genuine field of type `note` (singular), reachable as `keeper://[UID]/field/note`. That is separate from the record-level `notes` property that every record has.
 
 ## File Operations
 
