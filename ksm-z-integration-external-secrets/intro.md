@@ -16,6 +16,7 @@ Welcome to this interactive scenario where you'll learn how to integrate Keeper 
 - Basic understanding of Kubernetes concepts
 - Familiarity with Keeper Secrets Manager
 - Access to a Keeper Security account with KSM enabled
+- No Keeper Gateway is needed. The Gateway is only required for KeeperPAM features such as password rotation and connections.
 
 ## Environment
 
