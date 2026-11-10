@@ -14,9 +14,14 @@
         "verify": "verify-step2.sh"
       },
       {
-        "title": "Push a Secret to Keeper (Optional)",
+        "title": "Custom Fields and Files",
         "text": "step3.md",
         "verify": "verify-step3.sh"
+      },
+      {
+        "title": "Push a Secret to Keeper (Optional)",
+        "text": "step4.md",
+        "verify": "verify-step4.sh"
       }
     ],
     "intro": {

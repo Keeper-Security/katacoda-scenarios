@@ -1,69 +1,133 @@
-# Step 3 (Optional): Push a Secret from Kubernetes to Keeper
+# Step 3: Custom Fields and Files
 
-So far secrets have flowed from Keeper into Kubernetes. External Secrets can also go the other way: a **PushSecret** copies a value that was created inside the cluster into a Keeper record, so it is stored and audited in your vault.
+Real records usually hold more than a login and a password: API keys in custom fields, certificates or config files as attachments. In this step you'll pull both into Kubernetes and hand them to a pod as an environment variable and a mounted file.
 
-> **Prerequisite**: The KSM application must have **Can Edit** permission on the shared folder you used as `folderID` in Step 1. New records are created in that folder.
+## 1. Add a Custom Field and a File to Your Record
 
-## 1. Create a Value Inside Kubernetes
+In your Keeper Vault, edit the record you used in Step 1 (`[RECORD UID]`):
 
-Let's generate an API token inside the cluster, the way an application or operator might:
+1. Add a **custom field** (for example type *Text* or *Hidden Field*) with the label **`api_key`** and any value.
+2. **Attach a small file**, for example a `.json`, `.pem` or `.txt` file. Note the file name exactly as the vault shows it on the record.
+3. Save the record.
 
-```bash
-kubectl create secret generic app-api-token \
-  --from-literal=api_token="$(openssl rand -hex 16)"
-```{{execute}}
+> **Important**: Replace `[FILE NAME]` below with the attachment's name as shown in the vault (for example `config.json`). External Secrets matches attachments by the name shown in the vault, which is the file's title. If you renamed the attachment in the vault, use the new name, not the original filename.
 
-## 2. Create the PushSecret
+## 2. Create the ExternalSecret
+
+No JSON parsing is needed: `property` takes the custom field's **label** or the attachment's **name** directly.
 
 ```bash
 kubectl apply -f - <<EOF
-apiVersion: external-secrets.io/v1alpha1     # PushSecret is still v1alpha1 in current External Secrets releases
-kind: PushSecret
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
 metadata:
-  name: ksm-push-api-token                   # name of the PushSecret
+  name: ksm-custom-and-files
 spec:
-  secretStoreRefs:                           # push through the SecretStore from Step 1
-    - name: my-external-secrets-secretstore
-      kind: SecretStore
-  refreshInterval: 1h                        # how often the value is pushed again
-  deletionPolicy: Delete                     # deleting this PushSecret also deletes the Keeper record
-  selector:
-    secret:
-      name: app-api-token                    # the Kubernetes Secret to read from
+  refreshInterval: 1h                     # how often to re-read the record from Keeper
+  secretStoreRef:                         # same SecretStore as Step 1
+    kind: SecretStore
+    name: my-external-secrets-secretstore
+  target:
+    name: my-app-extras                   # Kubernetes Secret to create
   data:
-    - match:
-        secretKey: api_token                 # key inside the Kubernetes Secret
-        remoteRef:
-          remoteKey: k8s-generated-api-token/api_token   # <record title>/<field> in Keeper
+    - secretKey: api-key                  # key name in the Kubernetes Secret
+      remoteRef:
+        key: "[RECORD UID]"               # the Keeper record
+        property: "api_key"               # custom field: use its label
+    - secretKey: app-file                 # key name in the Kubernetes Secret
+      remoteRef:
+        key: "[RECORD UID]"
+        property: "[FILE NAME]"           # attachment: use its name as shown in the vault
+EOF
+```{{copy}}
+
+Check that it synced (`STATUS` should be `SecretSynced`):
+
+```bash
+kubectl get externalsecret ksm-custom-and-files
+```{{execute}}
+
+## 3. Use Them in a Pod
+
+The custom field becomes an environment variable and the attachment becomes a file under `/etc/keeper`:
+
+```bash
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name: extras-demo
+spec:
+  restartPolicy: Never
+  containers:
+    - name: demo
+      image: busybox
+      command: ["sh", "-c", "echo API key is \$API_KEY; echo; echo File from Keeper:; cat /etc/keeper/app-file"]
+      env:
+        - name: API_KEY                   # environment variable for the app...
+          valueFrom:
+            secretKeyRef:
+              name: my-app-extras         # ...from the Secret External Secrets created
+              key: api-key
+      volumeMounts:
+        - name: keeper-files              # mount the Secret as files
+          mountPath: /etc/keeper
+          readOnly: true
+  volumes:
+    - name: keeper-files
+      secret:
+        secretName: my-app-extras
+        items:
+          - key: app-file                 # only mount the attachment...
+            path: app-file                # ...as /etc/keeper/app-file
 EOF
 ```{{execute}}
 
-The `remoteKey` format is `<record title>/<field>`, with exactly one `/`. External Secrets looks for a record with that title in the shared folder and creates it if it does not exist. Records created this way have the record type `externalSecrets`. Keys named `login`/`username`, `password` or `url` are written to the matching standard field; any other key becomes a custom field with that label.
-
-## 3. Verify the Push
+Wait a few seconds for the pod to finish, then read its output:
 
 ```bash
-kubectl get pushsecret ksm-push-api-token
+kubectl wait --for=jsonpath='{.status.phase}'=Succeeded pod/extras-demo --timeout=120s && kubectl logs extras-demo
 ```{{execute}}
 
-`STATUS` should be `Synced`. Now open your Keeper Vault: a new record titled **k8s-generated-api-token** is in the shared folder, with a custom field `api_token` holding the generated value.
+You should see your custom field value and the contents of the attached file. Binary attachments (keystores, certificates in DER format) come through byte for byte as well.
 
-To push a change right away instead of waiting for `refreshInterval`, annotate the PushSecret:
+## 4. Or Take the Whole Record
+
+If you want everything at once, use `dataFrom.extract`. Every standard field, custom field and attachment becomes its own key:
 
 ```bash
-kubectl annotate pushsecret ksm-push-api-token force-sync=$(date +%s) --overwrite
+kubectl apply -f - <<EOF
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: ksm-whole-record
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: SecretStore
+    name: my-external-secrets-secretstore
+  target:
+    name: my-whole-record
+  dataFrom:
+    - extract:
+        key: "[RECORD UID]"               # all fields, custom fields and files of this record
+EOF
+```{{copy}}
+
+List the keys it created (sizes only, values stay hidden):
+
+```bash
+kubectl describe secret my-whole-record
 ```{{execute}}
 
-> **Note**: Editing the Kubernetes Secret does not push immediately. The new value reaches Keeper on the next `refreshInterval` or when you force a sync as shown above.
+Characters that are not allowed in Kubernetes Secret keys, such as spaces, are replaced with `_` (a custom field labelled `API Token` becomes the key `API_Token`). You will also see a `fileRef` key: it holds Keeper's internal IDs of the attachments and can be ignored.
 
-## 4. Important: One Field per New Record
+## 5. Watch Out for Duplicate Names
 
-External Secrets writes **one field** when it creates a Keeper record, and afterwards can only update fields that already exist on it. That means pushing two keys (for example a username and a password) into the **same new record** does not work:
+External Secrets requires every field label, custom field label and attachment name in a record to be unique, **including** the names of standard fields such as `login`, `password` and `url`. If two of them collide, for example a custom field labelled `password` on a login record or two attachments with the same name, **the whole record fails** with `invalid Secret. Following keys are duplicated`, even for the fields you did not ask for. Rename one of them in the vault to fix it.
 
-- For `login`/`password`/`url` keys, the second key is silently skipped even though the PushSecret shows `Synced`.
-- For any other key, the PushSecret fails with `does not contain any custom field with label <key>`.
+If an ExternalSecret does not sync, the detailed reason is in the operator logs:
 
-Two ways to push several values:
-
-- **Push each value to its own record**, as this step does.
-- **Pre-create the record** in Keeper, titled as in `remoteKey`, with record type `externalSecrets` and every field you will push. External Secrets then only updates the existing fields.
+```bash
+kubectl logs -n external-secrets deploy/external-secrets | grep ksm-custom-and-files
+```{{execute}}

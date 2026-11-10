@@ -6,7 +6,8 @@ You've successfully completed the KSM Integration with Kubernetes External Secre
 2. Configured KSM integration with External Secrets
 3. Created and managed secrets using KSM
 4. Deployed an application that uses secrets from KSM
-5. (Optional) Pushed a secret created in Kubernetes back to Keeper
+5. Used custom fields and file attachments from a record
+6. (Optional) Pushed a secret created in Kubernetes back to Keeper
 
 ## Key Takeaways
 
@@ -15,7 +16,7 @@ You've successfully completed the KSM Integration with Kubernetes External Secre
 - Applications can access secrets through standard Kubernetes mechanisms
 - The integration maintains security while simplifying secret management
 
-## Clean Up the PushSecret (if you did Step 3)
+## Clean Up the PushSecret (if you did Step 4)
 
 Because `deletionPolicy` is `Delete`, removing the PushSecret also removes the record from Keeper:
 
