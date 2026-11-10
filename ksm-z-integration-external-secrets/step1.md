@@ -86,22 +86,24 @@ EOF
 
 The SecretStore defines how External Secrets should connect to KSM. We'll create one that uses our KSM configuration secret.
 
-> **Important**: Replace `[SHARED FOLDER UID]` with the UID of your Keeper Security shared folder.
+> **Important**: Replace `[SHARED FOLDER UID]` with the UID of a Keeper shared folder that is shared with your KSM Application.
+>
+> `folderID` is only the folder where **PushSecret** creates new records (optional Step 4). Reading is not limited to it: an ExternalSecret can read any record in **any** shared folder shared with the application, and read-only sharing is enough.
 
 ```bash
 kubectl apply -f - <<EOF
 apiVersion: external-secrets.io/v1
 kind: SecretStore
 metadata:
-  name: my-external-secrets-secretstore   # name of the SecretStore where retrieved secrets will be stored
+  name: my-external-secrets-secretstore   # name of this SecretStore (the connection to Keeper)
 spec:
   provider:
     keepersecurity:                       # name of the SecretStore provider
       authRef:
         name: ksm-config-secret           # name of the k8s Secret where KSM config is stored
         key: ksm_config                   # key in the k8s Secret where KSM config is stored
-      folderID: "[SHARED FOLDER UID]"     # UID of the shared folder in KeeperSecurity
-                                          # Make sure the folder is shared with the KSM Application
+      folderID: "[SHARED FOLDER UID]"     # shared folder where PushSecret creates records
+                                          # (reads work from every folder shared with the KSM Application)
 EOF
 ```{{copy}}
 

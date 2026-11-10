@@ -30,7 +30,9 @@ Refresh your vault — the **k8s-generated-api-token** record is gone. Use `dele
 
 - Use a **ClusterSecretStore** instead of a SecretStore to let every namespace use one Keeper connection. Set `namespace` under `authRef` to the namespace of the KSM configuration secret.
 - Enable `getByTitleFallback: true` on the store to reference records by title as well as by UID.
-- Choose a `refreshInterval` that fits your scale: every refresh of every ExternalSecret is a request to Keeper.
+- Choose a `refreshInterval` that fits your scale: every refresh of every ExternalSecret is a request to Keeper. `refreshInterval: 0` syncs once and **never** refreshes, so changes in Keeper will not reach that Secret.
+- **Share one credential with many applications**: keep a single Keeper record (never a copy) and share its folder read-only with each application's KSM Application. Give every namespace its own ExternalSecret pointing at the same record UID. One change in Keeper then updates the Secret in every namespace.
+- **Pair it with KeeperPAM password rotation**: rotation changes the password in the database and in the record together; External Secrets brings the new value into each namespace within `refreshInterval`, and Reloader restarts the pods. Until a pod's next refresh and restart it still holds the old password, so keep the interval short for rotated credentials and let applications retry failed connections.
 
 ## Next Steps
 
