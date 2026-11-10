@@ -68,7 +68,7 @@ spec:
 EOF
 ```{{execute}}
 
-`k8sSecretKeys` maps Keeper field names (left) to the key names you want in the Secret (right).
+`k8sSecretKeys` maps Keeper field names (left) to the key names you want in the Kubernetes Secret (right).
 
 ```bash
 kubectl wait --for=condition=Ready pod/k8s-secret-mode --timeout=120s && kubectl describe secret demo-db-secret
@@ -78,12 +78,76 @@ The Secret `demo-db-secret` now exists with the keys `POSTGRES_USER`, `POSTGRES_
 
 > **Note**: The Secret is created when the pod is created and **stays after the pod is deleted**. Delete it yourself when it is no longer needed (`kubectl delete secret demo-db-secret`). Like all Kubernetes Secrets it is stored in etcd.
 
+## 3. Keep the Kubernetes Secret Up to Date
+
+A Kubernetes Secret created by the Injector can also follow changes in Keeper: the sidecar rewrites it on every refresh. Because the sidecar writes to the Kubernetes API, the pod needs a **ServiceAccount** that is allowed to update that one Secret:
+
+```bash
+kubectl apply -f - <<'EOF'
+apiVersion: v1
+kind: ServiceAccount                                 # an identity for the pod
+metadata:
+  name: demo-secret-writer
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role                                           # what that identity may do...
+metadata:
+  name: update-demo-api-secret
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["demo-api-secret"]               # ...only on this one Secret
+    verbs: ["get", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding                                    # give the Role to the ServiceAccount
+metadata:
+  name: demo-secret-writer
+subjects:
+  - kind: ServiceAccount
+    name: demo-secret-writer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: update-demo-api-secret
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k8s-secret-rotation
+  annotations:
+    keeper.security/inject: "true"
+    keeper.security/ksm-config: "keeper-credentials"
+    keeper.security/inject-as-k8s-secret: "true"     # create a Kubernetes Secret...
+    keeper.security/k8s-secret-name: "demo-api-secret" # ...with this name
+    keeper.security/k8s-secret-rotation: "true"      # and keep it up to date
+    keeper.security/refresh-interval: "30s"
+    keeper.security/secret: "demo-api"
+spec:
+  serviceAccountName: demo-secret-writer             # run as the identity allowed to update it
+  containers:
+    - name: app
+      image: busybox
+      command: ["sh", "-c", "sleep 3600"]
+EOF
+```{{execute}}
+
+```bash
+kubectl wait --for=condition=Ready pod/k8s-secret-rotation --timeout=120s && kubectl get secret demo-api-secret -o jsonpath='{.data.api_key}' | base64 -d; echo
+```{{execute}}
+
+Now **edit the `api_key` of `demo-api` in your vault** again, wait about 30 seconds, and read the Kubernetes Secret once more:
+
+```bash
+kubectl get secret demo-api-secret -o jsonpath='{.data.api_key}' | base64 -d; echo
+```{{execute}}
+
+The Secret shows the new value. Without the ServiceAccount permission the sidecar logs a `forbidden` error and the Secret keeps its first value.
+
 ## Which Mode When?
 
 | Mode | Where the secret lives | Rotates live | Use for |
 |---|---|---|---|
 | Files (default) | Pod memory only | Yes | Almost everything |
 | Environment variables | Pod spec (etcd) | No, needs a pod restart | Apps that can only read env vars |
-| Kubernetes Secret | Secret object (etcd) | With extra setup (see below) | Tools that require a Secret |
-
-> **Keeping a Kubernetes Secret up to date**: add `keeper.security/k8s-secret-rotation: "true"` to a pod that uses the YAML form shown above (`injectAsK8sSecret` under `secrets:`), and run that pod with a ServiceAccount that is allowed to `get` and `update` that Secret. The sidecar then rewrites the Secret on every refresh. Without that permission the update is refused, and the Secret keeps its first values.
+| Kubernetes Secret | Secret object (etcd) | Yes, with `k8s-secret-rotation` and permission to update the Secret (section 3) | Tools that require a Secret |

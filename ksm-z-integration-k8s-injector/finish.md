@@ -15,8 +15,11 @@ You've injected secrets from Keeper into Kubernetes, step by step:
 ```bash
 kubectl delete deployment demo-app demo-postgres
 kubectl delete service demo-postgres
-kubectl delete pod hello-keeper pick-fields multi shapes rotation-demo envvars k8s-secret-mode whole-folder --ignore-not-found
-kubectl delete secret demo-db-secret --ignore-not-found
+kubectl delete pod hello-keeper pick-fields multi shapes rotation-demo envvars k8s-secret-mode k8s-secret-rotation whole-folder --ignore-not-found
+kubectl delete secret demo-db-secret demo-api-secret --ignore-not-found
+kubectl delete rolebinding demo-secret-writer --ignore-not-found
+kubectl delete role update-demo-api-secret --ignore-not-found
+kubectl delete serviceaccount demo-secret-writer --ignore-not-found
 ```{{execute}}
 
 ## Keeper Injector or External Secrets Operator?
