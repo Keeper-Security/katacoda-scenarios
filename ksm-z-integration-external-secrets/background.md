@@ -1,8 +1,8 @@
 # Background Information
 
-## Keeper Security Manager (KSM)
+## Keeper Secrets Manager (KSM)
 
-Keeper Security Manager is an enterprise-grade secrets management solution that provides:
+Keeper Secrets Manager is an enterprise-grade secrets management solution that provides:
 - Centralized secrets management
 - Role-based access control
 - Audit logging

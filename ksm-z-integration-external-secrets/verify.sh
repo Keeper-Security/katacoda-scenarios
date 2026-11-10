@@ -110,4 +110,18 @@ if ! externalsecret_exists ksm-external-secret; then
 fi
 echo "✅ ExternalSecret exists"
 
+# Check the ExternalSecret actually synced from Keeper (not just that it exists)
+echo "Checking ExternalSecret sync status..."
+if ! kubectl wait --for=condition=Ready --timeout=30s externalsecret/ksm-external-secret >/dev/null 2>&1; then
+    echo "❌ ExternalSecret has not synced from Keeper yet"
+    echo "   Run: kubectl get externalsecret ksm-external-secret"
+    echo "   Details: kubectl logs -n external-secrets deploy/external-secrets | grep ksm-external-secret"
+    exit 1
+fi
+if ! secret_exists my-external-secrets-values; then
+    echo "❌ Target secret my-external-secrets-values was not created"
+    exit 1
+fi
+echo "✅ ExternalSecret synced and secret my-external-secrets-values created"
+
 echo "🎉 All Step 1 checks passed! External Secrets integration is properly configured." 

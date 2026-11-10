@@ -1,6 +1,6 @@
 # KSM Integration with Kubernetes External Secrets
 
-Welcome to this interactive scenario where you'll learn how to integrate Keeper Security Manager (KSM) with Kubernetes External Secrets Operator. This integration allows you to securely manage your Kubernetes secrets using Keeper's enterprise-grade security.
+Welcome to this interactive scenario where you'll learn how to integrate Keeper Secrets Manager (KSM) with Kubernetes External Secrets Operator. This integration allows you to securely manage your Kubernetes secrets using Keeper's enterprise-grade security.
 
 ## What you'll learn
 
@@ -8,11 +8,12 @@ Welcome to this interactive scenario where you'll learn how to integrate Keeper 
 - How to configure KSM integration with External Secrets
 - How to create and manage secrets using KSM
 - How to deploy applications that use secrets from KSM
+- (Optional) How to push a secret created in Kubernetes back to Keeper
 
 ## Prerequisites
 
 - Basic understanding of Kubernetes concepts
-- Familiarity with Keeper Security Manager
+- Familiarity with Keeper Secrets Manager
 - Access to a Keeper Security account with KSM enabled
 
 ## Environment

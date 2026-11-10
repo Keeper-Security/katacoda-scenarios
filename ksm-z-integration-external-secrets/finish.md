@@ -6,6 +6,7 @@ You've successfully completed the KSM Integration with Kubernetes External Secre
 2. Configured KSM integration with External Secrets
 3. Created and managed secrets using KSM
 4. Deployed an application that uses secrets from KSM
+5. (Optional) Pushed a secret created in Kubernetes back to Keeper
 
 ## Key Takeaways
 
@@ -13,6 +14,22 @@ You've successfully completed the KSM Integration with Kubernetes External Secre
 - Secrets are automatically synced and can be rotated securely
 - Applications can access secrets through standard Kubernetes mechanisms
 - The integration maintains security while simplifying secret management
+
+## Clean Up the PushSecret (if you did Step 3)
+
+Because `deletionPolicy` is `Delete`, removing the PushSecret also removes the record from Keeper:
+
+```bash
+kubectl delete pushsecret ksm-push-api-token
+```{{execute}}
+
+Refresh your vault — the **k8s-generated-api-token** record is gone. Use `deletionPolicy: None` when the record should stay in Keeper.
+
+## Going Further
+
+- Use a **ClusterSecretStore** instead of a SecretStore to let every namespace use one Keeper connection. Set `namespace` under `authRef` to the namespace of the KSM configuration secret.
+- Enable `getByTitleFallback: true` on the store to reference records by title as well as by UID.
+- Choose a `refreshInterval` that fits your scale: every refresh of every ExternalSecret is a request to Keeper.
 
 ## Next Steps
 
@@ -25,7 +42,7 @@ You've successfully completed the KSM Integration with Kubernetes External Secre
 
 ## Additional Resources
 
-- [Keeper Security Manager Documentation](https://docs.keeper.io/secrets-manager/secrets-manager/overview)
+- [Keeper Secrets Manager Documentation](https://docs.keeper.io/secrets-manager/secrets-manager/overview)
 - [External Secrets Operator Documentation](https://external-secrets.io/)
 - [Kubernetes Secrets Documentation](https://kubernetes.io/docs/concepts/configuration/secret/)
 

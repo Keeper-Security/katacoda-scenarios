@@ -1,6 +1,6 @@
 # Step 1: Configure External Secrets
 
-In this step, we'll set up the External Secrets Operator and configure it to work with Keeper Security Manager (KSM).
+In this step, we'll set up the External Secrets Operator and configure it to work with Keeper Secrets Manager (KSM).
 
 ## 1. Install External Secrets Operator
 
@@ -61,6 +61,12 @@ kubectl get crd | grep external-secrets
 ## 4. Create KSM Configuration Secret
 
 We need to create a Kubernetes secret to store the KSM configuration. This secret will be used by External Secrets to authenticate with Keeper Security.
+
+Before you continue, prepare the following in your Keeper Vault:
+
+- A **Secrets Manager Application** with a **shared folder** shared to it. Read-only access is enough for this step. Give the application **Can Edit** permission on the folder if you plan to do the optional PushSecret step.
+- A **Client Device** added to that application with **IP lock disabled**. Pods move between nodes and their outbound IP address can change, and an IP-locked device stops working when it does.
+- The device's configuration exported as a **Base64** string. External Secrets needs this initialized configuration; a one-time access token (for example `US:abc123...`) does **not** work here.
 
 > **Important**: Replace `[KSM CONFIG]` with your Base64 encoded KSM configuration.
 
@@ -131,6 +137,26 @@ spec:
         password: "{{ .password }}"       # Map Keeper password field to password
 EOF
 ```{{copy}}
+
+## 7. Verify the Secret was Synced
+
+Check that the ExternalSecret synced successfully. The `STATUS` column should show `SecretSynced` and `READY` should be `True`:
+
+```bash
+kubectl get externalsecret ksm-external-secret
+```{{execute}}
+
+Confirm the Kubernetes Secret was created by printing the `username` it holds:
+
+```bash
+kubectl get secret my-external-secrets-values -o jsonpath='{.data.username}' | base64 -d; echo
+```{{execute}}
+
+> **Note**: A SecretStore with `STATUS Valid` only means its definition is well formed — the connection to Keeper is not tested until an ExternalSecret syncs. If the ExternalSecret has no status or shows `SecretSyncedError`, the detailed reason (for example an invalid KSM configuration, a wrong record UID, or a missing field) is in the operator logs:
+
+```bash
+kubectl logs -n external-secrets deploy/external-secrets | grep ksm-external-secret
+```{{execute}}
 
 ## Next Steps
 
