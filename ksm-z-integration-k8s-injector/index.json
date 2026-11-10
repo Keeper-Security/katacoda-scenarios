@@ -1,0 +1,19 @@
+{
+  "title": "KSM Integration: Kubernetes Secrets Injector",
+  "description": "Inject secrets from Keeper Secrets Manager straight into Kubernetes pods with a few annotations, from a hello-world pod to a real database app with live rotation.",
+  "details": {
+    "steps": [
+      { "title": "Install and Hello World", "text": "step1.md", "verify": "verify-step1.sh" },
+      { "title": "Pick Exactly What You Need", "text": "step2.md", "verify": "verify-step2.sh" },
+      { "title": "Shape Secrets for Your App", "text": "step3.md", "verify": "verify-step3.sh" },
+      { "title": "A Real App: Postgres and a Client", "text": "step4.md", "verify": "verify-step4.sh" },
+      { "title": "Rotation Without Restarts", "text": "step5.md", "verify": "verify-step5.sh" },
+      { "title": "Environment Variables and Kubernetes Secrets", "text": "step6.md", "verify": "verify-step6.sh" },
+      { "title": "Whole Folders, Troubleshooting and Production Tips", "text": "step7.md", "verify": "verify-step7.sh" }
+    ],
+    "intro": { "text": "intro.md", "background": "background.md" },
+    "finish": { "text": "finish.md" }
+  },
+  "environment": { "hideintro": false, "hidefinish": false, "uilayout": "terminal" },
+  "backend": { "imageid": "kubernetes-kubeadm-1node" }
+}
