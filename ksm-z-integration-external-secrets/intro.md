@@ -8,6 +8,7 @@ Welcome to this interactive scenario where you'll learn how to integrate Keeper 
 - How to configure KSM integration with External Secrets
 - How to create and manage secrets using KSM
 - How to deploy applications that use secrets from KSM
+- How to use custom fields and file attachments from a record
 - (Optional) How to push a secret created in Kubernetes back to Keeper
 
 ## Prerequisites
