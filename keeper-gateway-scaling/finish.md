@@ -63,7 +63,7 @@ As you integrate Keeper Gateway scaling into your production environments, consi
 
 **Example with External Secrets**:
 ```yaml
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: keeper-gateway-config
