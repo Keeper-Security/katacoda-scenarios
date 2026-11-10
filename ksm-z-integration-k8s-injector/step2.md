@@ -47,7 +47,7 @@ kubectl exec pick-fields -c app -- sh -c 'for f in /keeper/secrets/*; do echo "=
 
 Each file holds just the raw value (no JSON), which is exactly what most applications expect for a password file or an API key file.
 
-> **Important**: Output files must be **inside `/keeper/secrets`**. That is the only directory shared with your containers. A path elsewhere, such as `/app/secrets/db-pass`, makes the init container fail with `read-only file system` and the pod never starts.
+> **Important**: Output files must be **inside `/keeper/secrets`**. That is the only directory shared with your containers. A path elsewhere, such as `/app/secrets/db-pass`, is rejected as soon as you apply the pod: `output path "/app/secrets/db-pass" must be under /keeper/secrets`. Subdirectories such as `/keeper/secrets/certs/server.pem` are fine.
 
 ## 2. Several Whole Records at Once
 

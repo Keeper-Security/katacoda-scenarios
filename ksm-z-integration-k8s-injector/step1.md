@@ -33,14 +33,14 @@ helm repo add keeper https://keeper-security.github.io/helm-charts
 
 ```bash
 helm install keeper-injector keeper/keeper-injector \
-  --version 0.12.0 \
+  --version 0.12.1 \
   --namespace keeper-security \
   --create-namespace \
   --wait
 ```{{execute}}
 
 What this does:
-- `keeper/keeper-injector` is the Injector's official chart, pinned to version `0.12.0` so the tutorial behaves the same every time
+- `keeper/keeper-injector` is the Injector's official chart, pinned to version `0.12.1` so the tutorial behaves the same every time
 - it is installed into its own namespace, `keeper-security`
 - `--wait` returns once the Injector is running
 
@@ -75,7 +75,7 @@ metadata:
   name: hello-keeper
   annotations:
     keeper.security/inject: "true"                    # 1. turn the Injector on for this pod
-    keeper.security/ksm-config: "keeper-credentials"  # 2. which Secret holds the KSM configuration
+    keeper.security/ksm-config: "keeper-credentials"  # 2. the Kubernetes Secret holding your KSM config (created above)
     keeper.security/secret: "demo-db"                 # 3. which record to fetch (by title)
 spec:
   containers:
@@ -84,6 +84,8 @@ spec:
       command: ["sh", "-c", "sleep 3600"]             # just stay running so we can look inside
 EOF
 ```{{execute}}
+
+> **Two kinds of "secret"**: in this tutorial, a capitalised **Kubernetes Secret** is a Kubernetes object, like `keeper-credentials`, which holds the KSM configuration. The annotation `keeper.security/secret` (and `secrets`, `secret-<name>`) refers to a **record in your Keeper Vault**, such as `demo-db`.
 
 Wait for the pod to start:
 

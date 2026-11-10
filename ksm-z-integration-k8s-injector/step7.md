@@ -65,7 +65,7 @@ The reason is always in the **init container's log**:
 kubectl logs broken -c keeper-secrets-init | grep -o '"error":"[^"]*"' | head -1
 ```{{execute}}
 
-(If nothing is printed, the init container was just restarting; run the command again.) It says exactly what is wrong: `no record found with title: this-record-does-not-exist`. The same command shows other common mistakes in plain words, for example `KSM config is neither valid JSON nor base64` when the credentials Secret holds something other than a Base64 configuration, or a `read-only file system` error when an output path is outside `/keeper/secrets`.
+(If nothing is printed, the init container was just restarting; run the command again.) It says exactly what is wrong: `no record found with title: this-record-does-not-exist`. The same command shows other common mistakes in plain words, for example `KSM config is neither valid JSON nor base64` when the credentials Secret holds something other than a Base64 configuration. Some mistakes are caught even earlier: a pod whose output path is outside `/keeper/secrets` is rejected by `kubectl apply` itself, with a message saying which path is wrong.
 
 Clean up the broken pod:
 
